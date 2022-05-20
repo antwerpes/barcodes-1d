@@ -17,12 +17,17 @@
     ],
     "require": {
         "php": "^8.1",
-        "spatie/data-transfer-object": "^3.7"
+        "illuminate/collections": "^9.13",
+        "illuminate/support": "^9.13",
+        "meyfa/php-svg": "^0.11.3",
+        "spatie/data-transfer-object": "^3.7",
+        "symfony/options-resolver": "^6.0"
     },
     "require-dev": {
         "chiiya/code-style-php": "^2.9",
         "phpro/grumphp": "^1.12",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^6.0"
     },
     "autoload": {
         "psr-4": {
