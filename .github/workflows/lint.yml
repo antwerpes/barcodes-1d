@@ -1,0 +1,28 @@
+on: [push]
+name: lint
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v1
+      - name: Easy Coding Standard Action
+        run: ./vendor/bin/ecs check --fix
+      - name: PHP-CS-Fixer Action
+        run: ./vendor/bin/php-cs-fixer fix
+      - name: Rector Action
+        run: ./vendor/bin/rector process
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Lint files

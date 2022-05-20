@@ -1,0 +1,46 @@
+{
+    "name": "antwerpes/barcodes",
+    "description": "1D barcode generation for PHP",
+    "keywords": [
+        "antwerpes",
+        "barcodes",
+        "ean13"
+    ],
+    "homepage": "https://github.com/antwerpes/barcodes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Elisha Witte",
+            "email": "opensource@antwerpes.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "spatie/data-transfer-object": "^3.7"
+    },
+    "require-dev": {
+        "chiiya/code-style-php": "^2.9",
+        "phpro/grumphp": "^1.12",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Antwerpes\\Barcodes\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Antwerpes\\Barcodes\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpro/grumphp": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
