@@ -29,6 +29,9 @@
         "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^6.0"
     },
+    "suggest": {
+        "ext-imagick": "Required for rendering barcodes as PNG images"
+    },
     "autoload": {
         "psr-4": {
             "Antwerpes\\Barcodes\\": "src"

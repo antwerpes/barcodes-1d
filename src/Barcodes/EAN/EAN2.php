@@ -2,7 +2,6 @@
 
 namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Antwerpes\Barcodes\DTOs\Encoding;
 use Illuminate\Support\Str;
 
 /**
@@ -10,9 +9,14 @@ use Illuminate\Support\Str;
  */
 class EAN2 extends EAN
 {
-    public const STRUCTURE = ['LL', 'LG', 'GL', 'GG'];
-    public const START_BITS = '1011';
-    public const SEPARATOR = '01';
+    /** @var string[] */
+    final public const STRUCTURE = ['LL', 'LG', 'GL', 'GG'];
+
+    /** @var string */
+    final public const START_BITS = '1011';
+
+    /** @var string */
+    final public const SEPARATOR = '01';
 
     /**
      * {@inheritDoc}
@@ -30,6 +34,8 @@ class EAN2 extends EAN
         $structure = self::STRUCTURE[(int) $this->code % 4];
         $data = self::START_BITS.$this->encodeData($this->code, $structure, self::SEPARATOR);
 
-        return [new Encoding(data: $data, text: $this->code)];
+        return [
+            $this->createEncoding(['data' => $data, 'text' => $this->code]),
+        ];
     }
 }

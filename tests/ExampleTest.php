@@ -9,6 +9,9 @@ class ExampleTest extends TestCase
 {
     public function test_it(): void
     {
-//        dump(Barcodes::create('123456789012', Barcodes\Format::EAN_13));
+        $result = Barcodes::create('1234567', Barcodes\Common\Format::MSI, [
+            'check_digit' => Barcodes\MSI::MOD_1110,
+        ])->toPNG(2);
+        file_put_contents('img.png', base64_decode($result, true));
     }
 }

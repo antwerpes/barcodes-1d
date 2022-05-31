@@ -2,7 +2,6 @@
 
 namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Antwerpes\Barcodes\DTOs\Encoding;
 use Illuminate\Support\Str;
 
 /**
@@ -10,12 +9,17 @@ use Illuminate\Support\Str;
  */
 class EAN5 extends EAN
 {
-    public const STRUCTURE = [
+    /** @var string[] */
+    final public const STRUCTURE = [
         'GGLLL', 'GLGLL', 'GLLGL', 'GLLLG', 'LGGLL',
         'LLGGL', 'LLLGG', 'LGLGL', 'LGLLG', 'LLGLG',
     ];
-    public const START_BITS = '01011';
-    public const SEPARATOR = '01';
+
+    /** @var string */
+    final public const START_BITS = '01011';
+
+    /** @var string */
+    final public const SEPARATOR = '01';
 
     /**
      * {@inheritDoc}
@@ -33,7 +37,9 @@ class EAN5 extends EAN
         $structure = self::STRUCTURE[$this->calculateChecksum()];
         $data = self::START_BITS.$this->encodeData($this->code, $structure, self::SEPARATOR);
 
-        return [new Encoding(data: $data, text: $this->code)];
+        return [
+            $this->createEncoding(['data' => $data, 'text' => $this->code]),
+        ];
     }
 
     /**
@@ -43,7 +49,7 @@ class EAN5 extends EAN
     protected function calculateChecksum(): int
     {
         $result = collect(mb_str_split($this->code))->reduce(
-            fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 ? 3 : 9)),
+            fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 !== 0 ? 3 : 9)),
             0,
         );
 

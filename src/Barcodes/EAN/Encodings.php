@@ -4,9 +4,12 @@ namespace Antwerpes\Barcodes\Barcodes\EAN;
 
 class Encodings
 {
-    public const SIDE_GUARD = '101';
-    public const MIDDLE_GUARD = '01010';
-    public const BINARIES = [
+    /** @var string */
+    final public const SIDE_GUARD = '101';
+
+    /** @var string */
+    final public const MIDDLE_GUARD = '01010';
+    final public const BINARIES = [
         'L' => [ // Odd parity
             '0001101', '0011001', '0010011', '0111101', '0100011',
             '0110001', '0101111', '0111011', '0110111', '0001011',

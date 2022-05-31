@@ -2,20 +2,34 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
+use Antwerpes\Barcodes\DTOs\BarcodeGlobalOptions;
+use Antwerpes\Barcodes\DTOs\Encoding;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class Barcode
 {
-    protected string $code;
+    /** @var int */
+    public const FONT_SIZE = 20;
     protected array $options;
 
-    public function __construct(string $code, array $options = [])
-    {
-        $this->code = $code;
+    public function __construct(
+        protected string $code,
+        array $options = [],
+    ) {
         $resolver = new OptionsResolver;
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
+    }
+
+    /**
+     * Get resolved options.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    public function getOptions(): BarcodeGlobalOptions
+    {
+        return new BarcodeGlobalOptions($this->options);
     }
 
     /**
@@ -61,5 +75,35 @@ abstract class Barcode
         foreach (['margin_top', 'margin_right', 'margin_bottom', 'margin_left'] as $margin) {
             $resolver->setDefault($margin, fn (Options $options) => $options['margin']);
         }
+    }
+
+    /**
+     * Calculate encoding data and create new encoding.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    protected function createEncoding(array $data): Encoding
+    {
+        $encoding = new Encoding(array_merge([
+            'height' => $this->options['height'],
+            'align' => $this->options['text_align'],
+        ], $data));
+
+        $encoding->totalWidth = (int) ceil(mb_strlen($encoding->data) * $this->options['width']);
+        $encoding->totalHeight = $this->getEncodingHeight($encoding);
+
+        return $encoding;
+    }
+
+    /**
+     * Get encoding height depending on text and margins that have been configured.
+     */
+    protected function getEncodingHeight(Encoding $encoding): int
+    {
+        $textHeight = $this->options['display_value'] && $encoding->text
+            ? self::FONT_SIZE + $this->options['text_margin']
+            : 0;
+
+        return $encoding->height + $textHeight + $this->options['margin_top'] + $this->options['margin_bottom'];
     }
 }
