@@ -21,4 +21,7 @@ class Format
 
     /** @var string */
     final public const MSI = 'MSI';
+
+    /** @var string */
+    final public const CODABAR = 'Codabar';
 }

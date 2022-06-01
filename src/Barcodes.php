@@ -3,6 +3,7 @@
 namespace Antwerpes\Barcodes;
 
 use Antwerpes\Barcodes\Barcodes\Barcode;
+use Antwerpes\Barcodes\Barcodes\Codabar;
 use Antwerpes\Barcodes\Barcodes\Common\Format;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN13;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN2;
@@ -27,6 +28,7 @@ class Barcodes
         Format::EAN_13 => EAN13::class,
         Format::PHARMACODE => Pharmacode::class,
         Format::MSI => MSI::class,
+        Format::CODABAR => Codabar::class,
     ];
     protected ?BarcodeGlobalOptions $options = null;
     protected array $encodings = [];
