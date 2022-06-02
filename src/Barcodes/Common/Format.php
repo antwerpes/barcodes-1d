@@ -24,4 +24,13 @@ class Format
 
     /** @var string */
     final public const CODABAR = 'Codabar';
+
+    /** @var string */
+    final public const CODE_25 = 'Code-25';
+
+    /** @var string */
+    final public const CODE_25_INTERLEAVED = 'Code-25-Interleaved';
+
+    /** @var string */
+    final public const ITF_14 = 'ITF-14';
 }

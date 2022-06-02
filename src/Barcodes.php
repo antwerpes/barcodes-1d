@@ -4,11 +4,14 @@ namespace Antwerpes\Barcodes;
 
 use Antwerpes\Barcodes\Barcodes\Barcode;
 use Antwerpes\Barcodes\Barcodes\Codabar;
+use Antwerpes\Barcodes\Barcodes\Code25;
+use Antwerpes\Barcodes\Barcodes\Code25Interleaved;
 use Antwerpes\Barcodes\Barcodes\Common\Format;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN13;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN2;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN5;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN8;
+use Antwerpes\Barcodes\Barcodes\ITF14;
 use Antwerpes\Barcodes\Barcodes\MSI;
 use Antwerpes\Barcodes\Barcodes\Pharmacode;
 use Antwerpes\Barcodes\DTOs\BarcodeGlobalOptions;
@@ -29,6 +32,9 @@ class Barcodes
         Format::PHARMACODE => Pharmacode::class,
         Format::MSI => MSI::class,
         Format::CODABAR => Codabar::class,
+        Format::CODE_25 => Code25::class,
+        Format::CODE_25_INTERLEAVED => Code25Interleaved::class,
+        Format::ITF_14 => ITF14::class,
     ];
     protected ?BarcodeGlobalOptions $options = null;
     protected array $encodings = [];

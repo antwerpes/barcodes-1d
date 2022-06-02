@@ -10,16 +10,16 @@ use Illuminate\Support\Str;
 class EAN5 extends EAN
 {
     /** @var string[] */
-    final public const STRUCTURE = [
+    protected const STRUCTURE = [
         'GGLLL', 'GLGLL', 'GLLGL', 'GLLLG', 'LGGLL',
         'LLGGL', 'LLLGG', 'LGLGL', 'LGLLG', 'LLGLG',
     ];
 
     /** @var string */
-    final public const START_BITS = '01011';
+    protected const START_BITS = '01011';
 
     /** @var string */
-    final public const SEPARATOR = '01';
+    protected const SEPARATOR = '01';
 
     /**
      * {@inheritDoc}

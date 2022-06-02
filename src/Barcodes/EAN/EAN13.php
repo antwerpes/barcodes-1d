@@ -13,7 +13,7 @@ class EAN13 extends EAN
     use HasGuardedEncoding;
 
     /** @var string[] */
-    final public const STRUCTURE = [
+    protected const STRUCTURE = [
         'LLLLLL', 'LLGLGG', 'LLGGLG', 'LLGGGL', 'LGLLGG',
         'LGGLLG', 'LGGGLL', 'LGLGLG', 'LGLGGL', 'LGGLGL',
     ];

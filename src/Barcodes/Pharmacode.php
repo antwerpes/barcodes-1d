@@ -10,13 +10,13 @@ use Illuminate\Support\Str;
 class Pharmacode extends Barcode
 {
     /** @var string */
-    final public const THICK_BAR = '111';
+    protected const THICK_BAR = '111';
 
     /** @var string */
-    final public const THIN_BAR = '1';
+    protected const THIN_BAR = '1';
 
     /** @var string */
-    final public const SEPARATOR = '01';
+    protected const SEPARATOR = '01';
 
     /**
      * {@inheritDoc}

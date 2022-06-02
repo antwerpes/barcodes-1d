@@ -10,13 +10,13 @@ use Illuminate\Support\Str;
 class EAN2 extends EAN
 {
     /** @var string[] */
-    final public const STRUCTURE = ['LL', 'LG', 'GL', 'GG'];
+    protected const STRUCTURE = ['LL', 'LG', 'GL', 'GG'];
 
     /** @var string */
-    final public const START_BITS = '1011';
+    protected const START_BITS = '1011';
 
     /** @var string */
-    final public const SEPARATOR = '01';
+    protected const SEPARATOR = '01';
 
     /**
      * {@inheritDoc}

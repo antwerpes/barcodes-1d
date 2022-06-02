@@ -23,10 +23,10 @@ class MSI extends Barcode
     final public const MOD_1110 = 'MOD_1110';
 
     /** @var string */
-    protected const START_CHARACTER = '110';
+    protected const START_BITS = '110';
 
     /** @var string */
-    protected const STOP_CHARACTER = '1001';
+    protected const END_BITS = '1001';
 
     /** @var string[] */
     protected const BINARIES = [
@@ -65,7 +65,7 @@ class MSI extends Barcode
         $encoded = collect(mb_str_split($code))
             ->map(fn (string $value, int $idx) => self::BINARIES[(int) $value])
             ->join('');
-        $data = self::START_CHARACTER.$encoded.self::STOP_CHARACTER;
+        $data = self::START_BITS.$encoded.self::END_BITS;
 
         return [
             $this->createEncoding(['data' => $data, 'text' => $code]),
