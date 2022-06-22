@@ -5,23 +5,15 @@ namespace Antwerpes\Barcodes\Barcodes\EAN;
 use Antwerpes\Barcodes\Barcodes\Common\HasGuardedEncoding;
 use Illuminate\Support\Str;
 
-/**
- * @see https://en.wikipedia.org/wiki/International_Article_Number
- */
-class EAN13 extends EAN
+class UPCA extends EAN
 {
+    use CalculatesUPCAChecksum;
     use HasGuardedEncoding;
-
-    /** @var string[] */
-    protected const STRUCTURE = [
-        'LLLLLL', 'LLGLGG', 'LLGGLG', 'LLGGGL', 'LGLLGG',
-        'LGGLLG', 'LGGGLL', 'LGLGLG', 'LGLGGL', 'LGGLGL',
-    ];
 
     public function __construct(string $code, array $options = [])
     {
-        if (mb_strlen($code) === 12) {
-            $code .= $this->calculateChecksum($code);
+        if (mb_strlen($code) === 11) {
+            $code .= $this->calculateUPCAChecksum($code);
         }
 
         parent::__construct($code, $options);
@@ -33,8 +25,8 @@ class EAN13 extends EAN
     public function isValid(): bool
     {
         return
-            Str::of($this->code)->test('/^[0-9]{13}$/')
-            && ((int) $this->code[12]) === $this->calculateChecksum($this->code);
+            Str::of($this->code)->test('/^[0-9]{12}$/')
+            && ((int) $this->code[11]) === $this->calculateUPCAChecksum($this->code);
     }
 
     /**
@@ -46,7 +38,7 @@ class EAN13 extends EAN
 
         if ($this->options['display_value']) {
             $encodings[] = $this->createEncoding([
-                'data' => '000000000000',
+                'data' => '00000000',
                 'text' => $this->code[0],
                 'align' => 'left',
             ]);
@@ -54,8 +46,12 @@ class EAN13 extends EAN
 
         $encodings = [...$encodings, ...$this->createGuardedEncoding()];
 
-        if ($this->options['with_quiet_zone']) {
-            $encodings = [...$encodings, ...$this->createEndQuietZone()];
+        if ($this->options['display_value']) {
+            $encodings[] = $this->createEncoding([
+                'data' => '00000000',
+                'text' => $this->code[11],
+                'align' => 'right',
+            ]);
         }
 
         return $encodings;
@@ -66,7 +62,7 @@ class EAN13 extends EAN
      */
     protected function leftText(): string
     {
-        return mb_substr($this->code, 1, 6);
+        return mb_substr($this->code, 1, 5);
     }
 
     /**
@@ -74,7 +70,7 @@ class EAN13 extends EAN
      */
     protected function rightText(): string
     {
-        return mb_substr($this->code, 7, 6);
+        return mb_substr($this->code, 6, 5);
     }
 
     /**
@@ -82,9 +78,7 @@ class EAN13 extends EAN
      */
     protected function leftEncode(): string
     {
-        $structure = self::STRUCTURE[(int) $this->code[0]];
-
-        return $this->encodeData($this->leftText(), $structure);
+        return $this->encodeData($this->leftText(), 'LLLLL');
     }
 
     /**
@@ -92,20 +86,22 @@ class EAN13 extends EAN
      */
     protected function rightEncode(): string
     {
-        return $this->encodeData($this->rightText(), 'RRRRRR');
+        return $this->encodeData($this->rightText(), 'RRRRR');
     }
 
     /**
-     * Calculate the checksum for getting the correct structure. See
-     * https://en.wikipedia.org/wiki/International_Article_Number for algorithm details.
+     * Encode the left guard (including the first digit).
      */
-    protected function calculateChecksum(string $code): int
+    protected function encodeLeftGuard(): string
     {
-        $result = collect(mb_str_split(mb_substr($code, 0, 12)))->reduce(
-            fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 === 0 ? 1 : 3)),
-            0,
-        );
+        return Encodings::SIDE_GUARD.$this->encodeData($this->code[0], 'L');
+    }
 
-        return (10 - ($result % 10)) % 10;
+    /**
+     * Encode the right guard (including the last digit).
+     */
+    protected function encodeRightGuard(): string
+    {
+        return $this->encodeData($this->code[11], 'R').Encodings::SIDE_GUARD;
     }
 }

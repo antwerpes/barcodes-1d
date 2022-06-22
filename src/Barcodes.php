@@ -11,6 +11,8 @@ use Antwerpes\Barcodes\Barcodes\EAN\EAN13;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN2;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN5;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN8;
+use Antwerpes\Barcodes\Barcodes\EAN\UPCA;
+use Antwerpes\Barcodes\Barcodes\EAN\UPCE;
 use Antwerpes\Barcodes\Barcodes\ITF14;
 use Antwerpes\Barcodes\Barcodes\MSI;
 use Antwerpes\Barcodes\Barcodes\Pharmacode;
@@ -29,6 +31,8 @@ class Barcodes
         Format::EAN_5 => EAN5::class,
         Format::EAN_8 => EAN8::class,
         Format::EAN_13 => EAN13::class,
+        Format::UPC_A => UPCA::class,
+        Format::UPC_E => UPCE::class,
         Format::PHARMACODE => Pharmacode::class,
         Format::MSI => MSI::class,
         Format::CODABAR => Codabar::class,

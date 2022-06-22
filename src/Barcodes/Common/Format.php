@@ -17,6 +17,12 @@ class Format
     final public const EAN_13 = 'EAN-13';
 
     /** @var string */
+    final public const UPC_A = 'UPC-A';
+
+    /** @var string */
+    final public const UPC_E = 'UPC-E';
+
+    /** @var string */
     final public const PHARMACODE = 'Pharmacode';
 
     /** @var string */

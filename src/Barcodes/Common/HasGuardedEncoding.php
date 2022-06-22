@@ -23,11 +23,11 @@ trait HasGuardedEncoding
     protected function encodeFlat(): array
     {
         $data = [
-            Encodings::SIDE_GUARD,
-            $this->leftEncode(),
-            Encodings::MIDDLE_GUARD,
-            $this->rightEncode(),
-            Encodings::SIDE_GUARD,
+            $this->encodeLeftGuard(),
+            ...$this->hasMiddleGuard()
+                ? [$this->leftEncode(), Encodings::MIDDLE_GUARD, $this->rightEncode()]
+                : [$this->middleEncode()],
+            $this->encodeRightGuard(),
         ];
 
         return [
@@ -51,16 +51,37 @@ trait HasGuardedEncoding
         ];
     }
 
+    protected function encodeLeftGuard(): string
+    {
+        return Encodings::SIDE_GUARD;
+    }
+
+    protected function encodeRightGuard(): string
+    {
+        return Encodings::SIDE_GUARD;
+    }
+
+    protected function hasMiddleGuard(): bool
+    {
+        return true;
+    }
+
     protected function createGuardedEncoding(): array
     {
         $guardHeight = $this->options['height'] + $this->options['text_margin'] + 10;
 
         return [
-            $this->createEncoding(['data' => Encodings::SIDE_GUARD, 'height' => $guardHeight]),
-            $this->createEncoding(['data' => $this->leftEncode(), 'text' => $this->leftText()]),
-            $this->createEncoding(['data' => Encodings::MIDDLE_GUARD, 'height' => $guardHeight]),
-            $this->createEncoding(['data' => $this->rightEncode(), 'text' => $this->rightText()]),
-            $this->createEncoding(['data' => Encodings::SIDE_GUARD, 'height' => $guardHeight]),
+            $this->createEncoding(['data' => $this->encodeLeftGuard(), 'height' => $guardHeight]),
+            ...$this->hasMiddleGuard()
+                ? [
+                    $this->createEncoding(['data' => $this->leftEncode(), 'text' => $this->leftText()]),
+                    $this->createEncoding(['data' => Encodings::MIDDLE_GUARD, 'height' => $guardHeight]),
+                    $this->createEncoding(['data' => $this->rightEncode(), 'text' => $this->rightText()]),
+                ]
+                : [
+                    $this->createEncoding(['data' => $this->middleEncode(), 'text' => $this->middleText()]),
+                ],
+            $this->createEncoding(['data' => $this->encodeRightGuard(), 'height' => $guardHeight]),
         ];
     }
 
