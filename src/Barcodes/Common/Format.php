@@ -39,4 +39,7 @@ class Format
 
     /** @var string */
     final public const ITF_14 = 'ITF-14';
+
+    /** @var string */
+    final public const CODE_39 = 'Code-39';
 }

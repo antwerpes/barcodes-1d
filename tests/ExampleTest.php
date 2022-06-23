@@ -10,7 +10,7 @@ class ExampleTest extends TestCase
 {
     public function test_it(): void
     {
-        $result = Barcodes::create('042100005264', Format::UPC_E)->toSVG();
+        $result = Barcodes::create('ABC-01', Format::CODE_39)->toSVG();
         file_put_contents('img.svg', $result);
     }
 }
