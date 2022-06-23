@@ -7,6 +7,7 @@ use Antwerpes\Barcodes\Barcodes\Codabar;
 use Antwerpes\Barcodes\Barcodes\Code25;
 use Antwerpes\Barcodes\Barcodes\Code25Interleaved;
 use Antwerpes\Barcodes\Barcodes\Code39;
+use Antwerpes\Barcodes\Barcodes\Code93;
 use Antwerpes\Barcodes\Barcodes\Common\Format;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN13;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN2;
@@ -41,6 +42,7 @@ class Barcodes
         Format::CODE_25_INTERLEAVED => Code25Interleaved::class,
         Format::ITF_14 => ITF14::class,
         Format::CODE_39 => Code39::class,
+        Format::CODE_93 => Code93::class,
     ];
     protected ?BarcodeGlobalOptions $options = null;
     protected array $encodings = [];

@@ -6,56 +6,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Code39 extends Barcode
 {
-    /** @var array<int|string, string> */
-    protected const BINARIES = [
-        '0' => '101000111011101',
-        '1' => '111010001010111',
-        '2' => '101110001010111',
-        '3' => '111011100010101',
-        '4' => '101000111010111',
-        '5' => '111010001110101',
-        '6' => '101110001110101',
-        '7' => '101000101110111',
-        '8' => '111010001011101',
-        '9' => '101110001011101',
-        'A' => '111010100010111',
-        'B' => '101110100010111',
-        'C' => '111011101000101',
-        'D' => '101011100010111',
-        'E' => '111010111000101',
-        'F' => '101110111000101',
-        'G' => '101010001110111',
-        'H' => '111010100011101',
-        'I' => '101110100011101',
-        'J' => '101011100011101',
-        'K' => '111010101000111',
-        'L' => '101110101000111',
-        'M' => '111011101010001',
-        'N' => '101011101000111',
-        'O' => '111010111010001',
-        'P' => '101110111010001',
-        'Q' => '101010111000111',
-        'R' => '111010101110001',
-        'S' => '101110101110001',
-        'T' => '101011101110001',
-        'U' => '111000101010111',
-        'V' => '100011101010111',
-        'W' => '111000111010101',
-        'X' => '100010111010111',
-        'Y' => '111000101110101',
-        'Z' => '100011101110101',
-        '-' => '100010101110111',
-        '.' => '111000101011101',
-        ' ' => '100011101011101',
-        '$' => '100010001000101',
-        '/' => '100010001010001',
-        '+' => '100010100010001',
-        '%' => '101000100010001',
-        '*' => '100010111011101',
-    ];
-
     /** @var array<int, string> */
-    protected const REPRESENTATIONS = [
+    final public const REPRESENTATIONS = [
         0 => '%U',
         1 => '$A',
         2 => '$B',
@@ -147,12 +99,60 @@ class Code39 extends Barcode
         122 => '+Z',
     ];
 
+    /** @var array<int|string, string> */
+    protected const BINARIES = [
+        '0' => '101000111011101',
+        '1' => '111010001010111',
+        '2' => '101110001010111',
+        '3' => '111011100010101',
+        '4' => '101000111010111',
+        '5' => '111010001110101',
+        '6' => '101110001110101',
+        '7' => '101000101110111',
+        '8' => '111010001011101',
+        '9' => '101110001011101',
+        'A' => '111010100010111',
+        'B' => '101110100010111',
+        'C' => '111011101000101',
+        'D' => '101011100010111',
+        'E' => '111010111000101',
+        'F' => '101110111000101',
+        'G' => '101010001110111',
+        'H' => '111010100011101',
+        'I' => '101110100011101',
+        'J' => '101011100011101',
+        'K' => '111010101000111',
+        'L' => '101110101000111',
+        'M' => '111011101010001',
+        'N' => '101011101000111',
+        'O' => '111010111010001',
+        'P' => '101110111010001',
+        'Q' => '101010111000111',
+        'R' => '111010101110001',
+        'S' => '101110101110001',
+        'T' => '101011101110001',
+        'U' => '111000101010111',
+        'V' => '100011101010111',
+        'W' => '111000111010101',
+        'X' => '100010111010111',
+        'Y' => '111000101110101',
+        'Z' => '100011101110101',
+        '-' => '100010101110111',
+        '.' => '111000101011101',
+        ' ' => '100011101011101',
+        '$' => '100010001000101',
+        '/' => '100010001010001',
+        '+' => '100010100010001',
+        '%' => '101000100010001',
+        '*' => '100010111011101',
+    ];
+
     /**
      * {@inheritDoc}
      */
     public function isValid(): bool
     {
-        $code = $this->options['allow_extended'] ? $this->replaceASCIICharacters($this->code) : $this->code;
+        $code = $this->options['full_ascii'] ? $this->replaceASCIICharacters($this->code) : $this->code;
 
         return collect(mb_str_split($code))
             ->every(fn (string $value) => array_key_exists($value, self::BINARIES));
@@ -165,7 +165,7 @@ class Code39 extends Barcode
     {
         $code = str_replace('*', '', $this->code);
 
-        if ($this->options['allow_extended']) {
+        if ($this->options['full_ascii']) {
             $code = $this->replaceASCIICharacters($code);
         }
 
@@ -195,7 +195,7 @@ class Code39 extends Barcode
     }
 
     /**
-     * Calculate and append the checksum.
+     * Calculate the checksum.
      */
     protected function calculateChecksum(string $code): int
     {
@@ -217,7 +217,7 @@ class Code39 extends Barcode
         parent::configureOptions($resolver);
         $resolver->setDefault('enable_checksum', false);
         $resolver->setAllowedTypes('enable_checksum', ['bool']);
-        $resolver->setDefault('allow_extended', false);
-        $resolver->setAllowedTypes('allow_extended', ['bool']);
+        $resolver->setDefault('full_ascii', false);
+        $resolver->setAllowedTypes('full_ascii', ['bool']);
     }
 }
