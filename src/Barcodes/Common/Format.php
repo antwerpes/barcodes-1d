@@ -45,4 +45,7 @@ class Format
 
     /** @var string */
     final public const CODE_93 = 'Code-93';
+
+    /** @var string */
+    final public const CODE_11 = 'Code-11';
 }

@@ -128,7 +128,7 @@ class Code93 extends Barcode
             fn (int $carry, string $char, int $idx) => $carry + (array_search(
                 $char,
                 $characters,
-                true,
+                false,
             ) * $weights[$idx % count($weights)]),
             0,
         );

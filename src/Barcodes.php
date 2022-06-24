@@ -4,6 +4,7 @@ namespace Antwerpes\Barcodes;
 
 use Antwerpes\Barcodes\Barcodes\Barcode;
 use Antwerpes\Barcodes\Barcodes\Codabar;
+use Antwerpes\Barcodes\Barcodes\Code11;
 use Antwerpes\Barcodes\Barcodes\Code25;
 use Antwerpes\Barcodes\Barcodes\Code25Interleaved;
 use Antwerpes\Barcodes\Barcodes\Code39;
@@ -43,6 +44,7 @@ class Barcodes
         Format::ITF_14 => ITF14::class,
         Format::CODE_39 => Code39::class,
         Format::CODE_93 => Code93::class,
+        Format::CODE_11 => Code11::class,
     ];
     protected ?BarcodeGlobalOptions $options = null;
     protected array $encodings = [];
