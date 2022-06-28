@@ -112,7 +112,7 @@ class Code93 extends Barcode
         ), Code39::REPRESENTATIONS);
 
         return collect(mb_str_split($code))
-            ->map(fn (string $char) => $representations[ord($char)] ?? $char)
+            ->map(fn (string $char) => isset(self::BINARIES[$char]) ? $char : $representations[ord($char)] ?? $char)
             ->join('');
     }
 

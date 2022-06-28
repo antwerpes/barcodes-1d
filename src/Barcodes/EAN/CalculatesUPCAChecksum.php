@@ -6,11 +6,11 @@ trait CalculatesUPCAChecksum
 {
     /**
      * Calculate the checksum for getting the correct structure. See
-     * https://en.wikipedia.org/wiki/International_Article_Number for algorithm details.
+     * https://en.wikipedia.org/wiki/Universal_Product_Code for algorithm details.
      */
     protected function calculateUPCAChecksum(string $code): int
     {
-        $result = collect(mb_str_split(mb_substr($code, 0, 7)))->reduce(
+        $result = collect(mb_str_split(mb_substr($code, 0, 11)))->reduce(
             fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 === 0 ? 3 : 1)),
             0,
         );

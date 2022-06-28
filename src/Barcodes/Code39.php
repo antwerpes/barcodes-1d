@@ -190,7 +190,9 @@ class Code39 extends Barcode
     protected function replaceASCIICharacters(string $code): string
     {
         return collect(mb_str_split($code))
-            ->map(fn (string $char) => self::REPRESENTATIONS[ord($char)] ?? $char)
+            ->map(
+                fn (string $char) => isset(self::BINARIES[$char]) ? $char : self::REPRESENTATIONS[ord($char)] ?? $char,
+            )
             ->join('');
     }
 

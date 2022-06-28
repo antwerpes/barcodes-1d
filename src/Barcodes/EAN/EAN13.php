@@ -2,7 +2,6 @@
 
 namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Antwerpes\Barcodes\Barcodes\Common\HasGuardedEncoding;
 use Illuminate\Support\Str;
 
 /**

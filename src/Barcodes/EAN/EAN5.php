@@ -16,7 +16,7 @@ class EAN5 extends EAN
     ];
 
     /** @var string */
-    protected const START_BITS = '01011';
+    protected const START_BITS = '1011';
 
     /** @var string */
     protected const SEPARATOR = '01';
@@ -49,7 +49,7 @@ class EAN5 extends EAN
     protected function calculateChecksum(): int
     {
         $result = collect(mb_str_split($this->code))->reduce(
-            fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 !== 0 ? 3 : 9)),
+            fn (int $carry, string $digit, int $idx) => $carry + ((int) $digit * ($idx % 2 === 0 ? 3 : 9)),
             0,
         );
 

@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace Antwerpes\Barcodes\Barcodes\Common;
+namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Antwerpes\Barcodes\Barcodes\EAN\Encodings;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 trait HasGuardedEncoding

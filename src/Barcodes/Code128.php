@@ -261,11 +261,6 @@ class Code128 extends Barcode
             return false;
         }
 
-        // Code starts with 4+ digit sequence, switch to C
-        if ($position === 0) {
-            return true;
-        }
-
         // Code ends with 4+ digit sequence, stay in A/B until the next position if length is odd
         if (preg_match('/^\d+$/', mb_substr($code, $position))) {
             return $sequenceLength % 2 === 0;
