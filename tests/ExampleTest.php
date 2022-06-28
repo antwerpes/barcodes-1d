@@ -10,8 +10,8 @@ class ExampleTest extends TestCase
 {
     public function test_it(): void
     {
-        $result = Barcodes::create('ABC12345A', Format::CODE_128)->toSVG();
-        file_put_contents('img.svg', $result);
+        $result = Barcodes::create('barcodes-1d', Format::CODE_128)->toPNG();
+        file_put_contents('img.png', base64_decode($result, true));
 
         // Code 128 Testcases
         /*

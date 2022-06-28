@@ -84,6 +84,7 @@ class SVGRenderer
 
         $text = new SVGText($encoding->text);
         $text->setStyle('font', '20px monospace');
+        $text->setStyle('fill', $this->options->text_color ?: $this->options->color);
         $y = $encoding->height + $this->options->text_margin + Barcode::FONT_SIZE;
         $text->setAttribute('text-anchor', $this->getTextAnchor($encoding));
         $text->setAttribute('x', (string) $this->getTextStart($encoding));

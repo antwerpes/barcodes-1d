@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class Barcode
 {
     /** @var int */
-    public const FONT_SIZE = 20;
+    final public const FONT_SIZE = 20;
     protected array $options;
 
     public function __construct(
@@ -54,6 +54,7 @@ abstract class Barcode
             'text_align' => 'center',
             'background' => '#ffffff',
             'color' => '#000000',
+            'text_color' => null,
             'margin' => 10,
             'display_value' => true,
         ]);
@@ -63,6 +64,7 @@ abstract class Barcode
         $resolver->setAllowedTypes('text_margin', ['int']);
         $resolver->setAllowedTypes('background', ['string', 'null']);
         $resolver->setAllowedTypes('color', ['string']);
+        $resolver->setAllowedTypes('text_color', ['string', 'null']);
         $resolver->setAllowedTypes('margin', ['int']);
         $resolver->setAllowedTypes('display_value', ['bool']);
         $resolver->setAllowedTypes('margin_top', ['int']);

@@ -2,8 +2,22 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
+use Illuminate\Support\Str;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 class Code128 extends Barcode
 {
+    /** @var string */
+    final public const MODE_AUTO = 'AUTO';
+
+    /** @var string */
+    final public const MODE_A = 'A';
+
+    /** @var string */
+    final public const MODE_B = 'B';
+
+    /** @var string */
+    final public const MODE_C = 'C';
     protected const CHARACTERS = [
         [' ', ' ', '00', '11011001100'],
         ['!', '!', '01', '11001101100'],
@@ -103,7 +117,7 @@ class Code128 extends Barcode
         [0x1F, 0x7F, '95', '10111101000'],
         ['FNC3', 'FNC3', '96', '10111100010'],
         ['FNC2', 'FNC2', '97', '11110101000'],
-        ['SHIFT', 'SHIFT', '98', '11110100010'],
+        ['SHIFT B', 'SHIFT A', '98', '11110100010'],
         ['CODE C', 'CODE C', '99', '10111011110'],
         ['CODE B', 'FNC4', 'CODE B', '10111101110'],
         ['FNC4', 'CODE A', 'CODE A', '11101011110'],
@@ -112,6 +126,9 @@ class Code128 extends Barcode
         ['START B', 'START B', 'START B', '11010010000'],
         ['START C', 'START C', 'START C', '11010011100'],
     ];
+
+    /** @var string */
+    protected const STOP_CHARACTER = '1100011101011';
     protected ?string $charset = null;
     protected ?array $charsetA = null;
     protected ?array $charsetB = null;
@@ -122,7 +139,19 @@ class Code128 extends Barcode
      */
     public function isValid(): bool
     {
-        return true;
+        if ($this->options['mode'] === self::MODE_A) {
+            return Str::of($this->code)->test('/^[\x00-\x5F]+$/');
+        }
+
+        if ($this->options['mode'] === self::MODE_B) {
+            return Str::of($this->code)->test('/^[\x20-\x7F]+$/');
+        }
+
+        if ($this->options['mode'] === self::MODE_C) {
+            return Str::of($this->code)->test('/^([0-9]{2})+$/');
+        }
+
+        return Str::of($this->code)->test('/^[\x00-\x7F]+$/');
     }
 
     /**
@@ -131,118 +160,164 @@ class Code128 extends Barcode
     public function encode(): array
     {
         $code = $this->code;
-        $result = [];
-        $chars = [];
+        $values = [$this->getStartCharacter($code)];
 
-        for ($position = 0; $position < mb_strlen($code); ++$position) {
+        for ($position = 0; $position < mb_strlen($code); $position += $this->usingCharsetC() ? 2 : 1) {
             $char = $code[$position];
-            $charset = $this->getCurrentCharset();
 
             if ($this->shouldSwitchCharset($code, $char, $position)) {
+                $charset = $this->getCurrentCharset();
                 $set = $this->getCharsetToSwitchTo($code, $char, $position);
-                $result[] = $charset === null
-                    ? array_search('START '.$set, $this->getCharsetA(), true)
-                    : array_search('CODE '.$set, $charset, true);
-                $chars[] = $charset === null ? 'START '.$set : 'CODE '.$set;
+                $values[] = array_search('CODE '.$set, $charset, true);
                 $this->charset = $set;
             }
 
-            $chars[] = $this->getCharacter($code, $char, $position);
-            $result[] = $this->getCharacterValue($code, $char, $position);
+            $values[] = $this->getCharacterValue($code, $char, $position);
         }
 
-//        dd($chars);
+        $values[] = $this->calculateChecksum($values);
+        $data = collect($values)->map(fn (int $value) => self::CHARACTERS[$value][3])->join('');
 
-        return $result;
+        return [
+            $this->createEncoding(['data' => $data.self::STOP_CHARACTER, 'text' => $code]),
+        ];
     }
 
-    protected function getCharacter(string $code, string $char, int $position): string
+    /**
+     * Get the binary encoding for the given $char at $position.
+     * - For Mode C we will take 2 characters instead of 1
+     * - For A/B we first try to match the char itself, then its ASCII code.
+     */
+    protected function getCharacterValue(string $code, string $char, int $position): int
     {
         $charset = $this->getCurrentCharset();
 
         if ($this->usingCharsetC()) {
-            return mb_substr($code, $position, 2);
-        }
-
-        if (array_search($char, $charset, true)) {
-            return $char;
-        }
-
-        return ord($char);
-    }
-
-    protected function getCharacterValue(string $code, string $char, int &$position): int
-    {
-        $charset = $this->getCurrentCharset();
-
-        if ($this->usingCharsetC()) {
-            $result = array_search(mb_substr($code, $position, 2), $charset, true);
-            ++$position; // Advance 2 instead of 1 position
-
-            return $result;
+            return array_search(mb_substr($code, $position, 2), $charset, true);
         }
 
         return array_search($char, $charset, true) ?: array_search(ord($char), $charset, true);
     }
 
     /**
-     * Check if the next $length characters starting from $start are digits.
+     * Get the length of the digit sequence starting at $start.
      */
-    protected function isDigitSequence(string $code, int $start, int $length): bool
+    protected function getDigitSequenceLength(string $code, int $start): int
     {
-        if ($start + $length > mb_strlen($code)) {
-            return false;
-        }
-
-        for ($i = $start; $i < $start + $length; ++$i) {
-            if (! is_numeric($code[$i])) {
-                return false;
-            }
-        }
-
-        return true;
+        return Str::of(mb_substr($code, $start))->match('/^(\d+)/')->length();
     }
 
     /**
-     * Check if the digit sequence starting from $start is odd or even.
+     * Check if the $char itself or its ASCII code are in the given $charset.
      */
-    protected function isEvenLengthDigitSequence(string $code, int $start): bool
+    protected function characterInSet(string $char, array $charset): bool
     {
-        preg_match('/(\d+)/', mb_substr($code, $start, -1), $matches);
+        return in_array($char, $charset, true) || in_array(ord($char), $charset, true);
+    }
 
-        return isset($matches[1]) && mb_strlen($matches[1]) % 2 === 0;
+    /**
+     * Get the start character and select the corresponding character set.
+     */
+    protected function getStartCharacter(string $code): int
+    {
+        $set = $this->getCharsetToSwitchTo($code, $code[0], 0);
+        $this->charset = $set;
+
+        return array_search('START '.$set, $this->getCharsetA(), true);
+    }
+
+    /**
+     * Should we switch to a different mode?
+     */
+    protected function shouldSwitchCharset(string $code, string $char, int $position): bool
+    {
+        if ($this->options['mode'] !== self::MODE_AUTO) {
+            return false;
+        }
+
+        if (! $this->usingCharsetC() && $this->shouldSwitchToC($code, $position)) {
+            return true;
+        }
+
+        // If next 2 characters are digits, and we're already in C, don't switch
+        if ($this->usingCharsetC() && $this->getDigitSequenceLength($code, $position) >= 2) {
+            return false;
+        }
+
+        $charset = $this->getCurrentCharset();
+
+        return $charset === null || ! $this->characterInSet($char, $charset);
+    }
+
+    /**
+     * Should we switch to mode C for more efficient encoding?
+     */
+    protected function shouldSwitchToC(string $code, int $position): bool
+    {
+        $sequenceLength = $this->getDigitSequenceLength($code, $position);
+
+        // Digit sequence length must be at least 4 to be considered
+        if ($sequenceLength < 4) {
+            return false;
+        }
+
+        // Code starts with 4+ digit sequence, switch to C
+        if ($position === 0) {
+            return true;
+        }
+
+        // Code ends with 4+ digit sequence, stay in A/B until the next position if length is odd
+        if (preg_match('/^\d+$/', mb_substr($code, $position))) {
+            return $sequenceLength % 2 === 0;
+        }
+
+        // Inner digit sequences must be at least 6 digits long for a switch to be worth it
+        return $sequenceLength >= 6;
+    }
+
+    /**
+     * Get the mode we should switch to.
+     */
+    protected function getCharsetToSwitchTo(string $code, string $char, int $position): string
+    {
+        if ($this->options['mode'] !== self::MODE_AUTO) {
+            return $this->options['mode'];
+        }
+
+        if ($this->getDigitSequenceLength($code, $position) >= 4) {
+            return 'C';
+        }
+
+        return $this->characterInSet($char, $this->getCharsetB()) ? 'B' : 'A';
+    }
+
+    /**
+     * Get cached character set A.
+     */
+    protected function getCharsetA(): array
+    {
+        return $this->charsetA ?: $this->charsetA = array_column(self::CHARACTERS, 0);
+    }
+
+    /**
+     * Get cached character set B.
+     */
+    protected function getCharsetB(): array
+    {
+        return $this->charsetB ?: $this->charsetB = array_column(self::CHARACTERS, 1);
+    }
+
+    /**
+     * Get cached character set C.
+     */
+    protected function getCharsetC(): array
+    {
+        return $this->charsetC ?: $this->charsetC = array_column(self::CHARACTERS, 2);
     }
 
     protected function usingCharsetC(): bool
     {
         return $this->charset === 'C';
-    }
-
-    protected function getCharsetA(): array
-    {
-        if ($this->charsetA !== null) {
-            return $this->charsetA;
-        }
-
-        return $this->charsetA = array_column(self::CHARACTERS, 0);
-    }
-
-    protected function getCharsetB(): array
-    {
-        if ($this->charsetB !== null) {
-            return $this->charsetB;
-        }
-
-        return $this->charsetB = array_column(self::CHARACTERS, 1);
-    }
-
-    protected function getCharsetC(): array
-    {
-        if ($this->charsetC !== null) {
-            return $this->charsetC;
-        }
-
-        return $this->charsetC = array_column(self::CHARACTERS, 2);
     }
 
     protected function getCurrentCharset(): ?array
@@ -255,50 +330,27 @@ class Code128 extends Barcode
         };
     }
 
-    protected function characterInSet(string $char, array $charset): bool
+    /**
+     * Calculate the checksum.
+     */
+    protected function calculateChecksum(array $values): int
     {
-        return in_array($char, $charset, true) || in_array(ord($char), $charset, true);
+        $sum = collect($values)->reduce(
+            fn (int $carry, int $value, int $idx) => $carry + $value * ($idx === 0 ? 1 : $idx),
+            0,
+        );
+
+        return $sum % 103;
     }
 
-    protected function shouldSwitchCharset(string $code, string $char, int $position): bool
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        if ($this->isDigitSequence($code, $position, 4) && ! $this->usingCharsetC()) {
-            preg_match('/(\d+)/', mb_substr($code, $position), $matches);
-            $sequenceLength = mb_strlen($matches[1]);
-
-            // Code starts with digit sequence
-            if ($position === 0) {
-                return true; // C
-            }
-
-            // Code ends with digit sequence
-            if (preg_match('/\d+$/', mb_substr($code, $position))) {
-                return $sequenceLength % 2 === 0; // Should stay in A or B until the next position if length is odd;
-            }
-
-            return $sequenceLength >= 6; // Inner digit sequences must be at least 6 digits long
-        }
-
-        // If next 2 characters are digits, and we're already in C, don't switch
-        if ($this->isDigitSequence($code, $position, 2) && $this->usingCharsetC()) {
-            return false;
-        }
-
-        $charset = $this->getCurrentCharset();
-
-        return $charset === null || ! $this->characterInSet($char, $charset);
-    }
-
-    protected function getCharsetToSwitchTo(string $code, string $char, int $position): string
-    {
-        if ($this->isDigitSequence($code, $position, 4)) {
-            return 'C';
-        }
-
-        if ($this->characterInSet($char, $this->getCharsetB())) {
-            return 'B';
-        }
-
-        return 'A';
+        parent::configureOptions($resolver);
+        $resolver->setDefault('mode', self::MODE_AUTO);
+        $resolver->setAllowedTypes('mode', ['string']);
+        $resolver->setAllowedValues('mode', [self::MODE_AUTO, self::MODE_A, self::MODE_B, self::MODE_C]);
     }
 }
