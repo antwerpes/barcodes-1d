@@ -1,27 +1,42 @@
-# Barcodes
+![Logo](./art/logo.png)
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/antwerpes/barcodes.svg?style=flat-square)](https://packagist.org/packages/antwerpes/barcodes)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/antwerpes/barcodes/run-tests?label=tests)](https://github.com/antwerpes/barcodes/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/antwerpes/barcodes/lint?label=code%20style)](https://github.com/antwerpes/barcodes/actions?query=workflow%3Alint+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/antwerpes/barcodes.svg?style=flat-square)](https://packagist.org/packages/antwerpes/barcodes)
+# Barcodes 1D
 
-PHP library for generating 1D barcodes.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/antwerpes/barcodes-1d.svg?style=flat-square)](https://packagist.org/packages/antwerpes/barcodes-1d)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/antwerpes/barcodes-1d/lint?label=code%20style)](https://github.com/antwerpes/barcodes-1d/actions?query=workflow%3Alint+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/antwerpes/barcodes-1d.svg?style=flat-square)](https://packagist.org/packages/antwerpes/barcodes-1d)
+
+Barcode generator written in PHP for encoding and rendering most common barcode formats to SVG/PNG.
+
+## Supported barcodes
+- Code 128 (Auto-Mode and forced A/B/C)
+- EAN-2
+- EAN-5
+- EAN-8
+- EAN-13
+- UPC-A
+- UPC-E
+- Codabar
+- Code 11
+- Code 2 out of 5
+- Code 2 out of 5 Interleaved
+- Code 39
+- Code 93
+- ITF-14
+- MSI (Mod10, Mod11, Mod1010, Mod1110)
+- Pharmacode
 
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
-composer require antwerpes/barcodes
+composer require antwerpes/barcodes-1d
 ```
 
 ## Usage
 
-## Testing
-
-```bash
-just test
-```
+Coming Soon!
 
 ## Changelog
 
