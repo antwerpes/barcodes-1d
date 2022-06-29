@@ -3,7 +3,6 @@
 namespace Antwerpes\Barcodes\Renderers;
 
 use Antwerpes\Barcodes\Barcodes\Barcode;
-use Antwerpes\Barcodes\DTOs\BarcodeGlobalOptions;
 use Antwerpes\Barcodes\DTOs\Encoding;
 use Illuminate\Support\Collection;
 use SVG\Nodes\Shapes\SVGRect;
@@ -12,16 +11,8 @@ use SVG\Nodes\Structures\SVGGroup;
 use SVG\Nodes\Texts\SVGText;
 use SVG\SVG;
 
-class SVGRenderer
+class SVGRenderer extends AbstractRenderer
 {
-    /**
-     * @param Encoding[] $encodings
-     */
-    public function __construct(
-        protected array $encodings,
-        protected BarcodeGlobalOptions $options,
-    ) {}
-
     /**
      * Render the encodings into an SVG string.
      */
@@ -83,9 +74,9 @@ class SVGRenderer
         }
 
         $text = new SVGText($encoding->text);
-        $text->setStyle('font', '20px monospace');
-        $text->setStyle('fill', $this->options->text_color ?: $this->options->color);
-        $y = $encoding->height + $this->options->text_margin + Barcode::FONT_SIZE;
+        $text->setStyle('font', $this->options->font_size.'px monospace');
+        $text->setStyle('fill', $this->options->text_color);
+        $y = $encoding->height + $this->options->text_margin + $this->options->font_size;
         $text->setAttribute('text-anchor', $this->getTextAnchor($encoding));
         $text->setAttribute('x', (string) $this->getTextStart($encoding));
         $text->setAttribute('y', (string) $y);
@@ -132,24 +123,6 @@ class SVGRenderer
             $rect->setStyle('fill', $this->options->background);
             $document->addChild($rect);
         }
-    }
-
-    /**
-     * Get the total width of the final barcode representation.
-     */
-    protected function getTotalWidth(): int
-    {
-        $totalWidth = collect($this->encodings)->sum('totalWidth');
-
-        return $totalWidth + $this->options->margin_left + $this->options->margin_right;
-    }
-
-    /**
-     * Get the maximum height of all encodings.
-     */
-    protected function getMaxHeight(): int
-    {
-        return collect($this->encodings)->max('totalHeight');
     }
 
     /**

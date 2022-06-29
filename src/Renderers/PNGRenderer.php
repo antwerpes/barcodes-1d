@@ -2,46 +2,36 @@
 
 namespace Antwerpes\Barcodes\Renderers;
 
-use Antwerpes\Barcodes\DTOs\BarcodeGlobalOptions;
 use Antwerpes\Barcodes\DTOs\Encoding;
-use Antwerpes\Barcodes\Exceptions\RequirementsNotInstalledException;
-use Imagick;
-use ImagickException;
+use Intervention\Image\AbstractFont;
+use Intervention\Image\AbstractShape;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
 
-class PNGRenderer
+class PNGRenderer extends AbstractRenderer
 {
-    /**
-     * @param Encoding[] $encodings
-     */
-    public function __construct(
-        protected array $encodings,
-        protected BarcodeGlobalOptions $options,
-        protected int|float $scale = 1,
-        protected ?string $svg = null,
-    ) {}
+    protected int|float $scale = 1;
 
     /**
      * Render the encodings into a base64-encoded PNG image string.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function render(): string
     {
-        if (! class_exists(Imagick::class)) {
-            throw new RequirementsNotInstalledException('ext-imagick is required to create PNG files.');
+        $manager = new ImageManager;
+        $image = $manager->canvas(
+            $this->getTotalWidth() * $this->scale,
+            $this->getMaxHeight() * $this->scale,
+            $this->options->background,
+        );
+        $currentX = $this->options->margin_left;
+
+        foreach ($this->encodings as $encoding) {
+            $this->drawBarcode($image, $encoding, $currentX);
+            $this->drawText($image, $encoding, $currentX);
+            $currentX += (int) ceil($encoding->totalWidth * $this->scale);
         }
 
-        $svg = $this->svg ?? (new SVGRenderer($this->encodings, $this->options))->render();
-        $im = new Imagick;
-        [$x, $y] = $this->getResolution($im, $svg);
-        $im->setResolution($x, $y);
-        $im->readImageBlob($svg);
-        $im->setImageFormat('png');
-        $blob = $im->getImageBlob();
-        $im->clear();
-        $im->destroy();
-
-        return base64_encode($blob);
+        return base64_encode($image->encode('png')->getEncoded());
     }
 
     /**
@@ -55,16 +45,48 @@ class PNGRenderer
     }
 
     /**
-     * Get the new image resolution, depending on the configured scale.
-     *
-     * @throws ImagickException
+     * Draw barcode for the given $encoding.
+     * We only care about the `1` bits (`0`s are empty spaces). We also want to group `1`s together,
+     * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      */
-    protected function getResolution(Imagick $image, string $svg): array
+    protected function drawBarcode(Image $image, Encoding $encoding, int $currentX): void
     {
-        $image->readImageBlob($svg);
-        $currentResolution = $image->getImageResolution();
-        $image->removeImage();
+        $chunks = $this->getEncodingChunks($encoding->data);
 
-        return [$this->scale * $currentResolution['x'], $this->scale * $currentResolution['y']];
+        foreach ($chunks as $chunk) {
+            $x = $currentX + ($chunk->first() * $this->options->width * $this->scale);
+            $image->rectangle(
+                $x,
+                $this->options->margin_top * $this->scale,
+                $x + ($this->options->width * $chunk->count() * $this->scale) - 1,
+                ($this->options->margin_top + $encoding->height) * $this->scale,
+                fn (AbstractShape $shape) => $shape->background($this->options->color),
+            );
+        }
+    }
+
+    /**
+     * Draw text for the given $encoding. The text-anchor attribute defines how the `x`
+     * value is used. For example, for text-anchor=middle, the rendered characters are
+     * aligned such that the middle of the text string is at the `x` position.
+     */
+    protected function drawText(Image $image, Encoding $encoding, int $currentX): void
+    {
+        if (! $this->options->display_value || $encoding->text === null) {
+            return;
+        }
+
+        $position = $currentX + ($this->getTextStart($encoding) * $this->scale);
+        $image->text(
+            $encoding->text,
+            $position,
+            ($this->options->margin_top + $encoding->height + $this->options->text_margin + 4) * $this->scale,
+            fn (AbstractFont $font) => $font
+                ->file($this->options->font)
+                ->size($this->options->font_size * $this->scale)
+                ->align($encoding->align)
+                ->valign('top')
+                ->color($this->options->text_color),
+        );
     }
 }

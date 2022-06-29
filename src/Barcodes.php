@@ -105,7 +105,7 @@ class Barcodes
      */
     public function toPNG(int|float $scale = 1): string
     {
-        $renderer = new PNGRenderer($this->encodings, $this->options, $scale, $this->svg);
+        $renderer = new PNGRenderer($this->encodings, $this->options);
 
         return $renderer->setScale($scale)->render();
     }

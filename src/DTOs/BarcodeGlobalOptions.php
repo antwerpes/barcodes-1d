@@ -11,6 +11,8 @@ class BarcodeGlobalOptions extends DataTransferObject
     public string $background;
     public string $color;
     public ?string $text_color;
+    public string|int $font;
+    public int $font_size;
     public bool $display_value;
     public int $margin_top;
     public int $margin_right;

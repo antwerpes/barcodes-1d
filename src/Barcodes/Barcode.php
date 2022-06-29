@@ -54,17 +54,18 @@ abstract class Barcode
             'text_align' => 'center',
             'background' => '#ffffff',
             'color' => '#000000',
-            'text_color' => null,
             'margin' => 10,
             'display_value' => true,
+            'font' => 4,
+            'font_size' => 20,
         ]);
-        $resolver->setDefined(['margin_top', 'margin_right', 'margin_bottom', 'margin_left']);
+        $resolver->setDefined(['margin_top', 'margin_right', 'margin_bottom', 'margin_left', 'text_color']);
         $resolver->setAllowedTypes('width', ['int']);
         $resolver->setAllowedTypes('height', ['int']);
         $resolver->setAllowedTypes('text_margin', ['int']);
         $resolver->setAllowedTypes('background', ['string', 'null']);
         $resolver->setAllowedTypes('color', ['string']);
-        $resolver->setAllowedTypes('text_color', ['string', 'null']);
+        $resolver->setAllowedTypes('text_color', ['string']);
         $resolver->setAllowedTypes('margin', ['int']);
         $resolver->setAllowedTypes('display_value', ['bool']);
         $resolver->setAllowedTypes('margin_top', ['int']);
@@ -72,11 +73,15 @@ abstract class Barcode
         $resolver->setAllowedTypes('margin_bottom', ['int']);
         $resolver->setAllowedTypes('margin_left', ['int']);
         $resolver->setAllowedTypes('text_align', ['string']);
+        $resolver->setAllowedTypes('font', ['string', 'int']);
+        $resolver->setAllowedTypes('font_size', ['int']);
         $resolver->setAllowedValues('text_align', ['left', 'center', 'right']);
 
         foreach (['margin_top', 'margin_right', 'margin_bottom', 'margin_left'] as $margin) {
             $resolver->setDefault($margin, fn (Options $options) => $options['margin']);
         }
+
+        $resolver->setDefault('text_color', fn (Options $options) => $options['color']);
     }
 
     /**
@@ -103,7 +108,7 @@ abstract class Barcode
     protected function getEncodingHeight(Encoding $encoding): int
     {
         $textHeight = $this->options['display_value'] && $encoding->text
-            ? self::FONT_SIZE + $this->options['text_margin']
+            ? $this->options['font_size'] + $this->options['text_margin']
             : 0;
 
         return $encoding->height + $textHeight + $this->options['margin_top'] + $this->options['margin_bottom'];
