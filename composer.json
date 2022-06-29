@@ -1,10 +1,12 @@
 {
-    "name": "antwerpes/barcodes",
-    "description": "1D barcode generation for PHP",
+    "name": "antwerpes/barcodes-1d",
+    "description": "Library for programmatically creating and rendering barcodes",
     "keywords": [
         "antwerpes",
         "barcodes",
-        "ean13"
+        "ean13",
+        "code128",
+        "upc"
     ],
     "homepage": "https://github.com/antwerpes/barcodes",
     "license": "MIT",
