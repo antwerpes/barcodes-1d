@@ -156,6 +156,7 @@ Generic options for all barcode formats:
 | `font_size`     | `20`             | `int`         | Large font sizes may break the layout                        |
 | `image_format`  | `png`            | `string`      | `png` / `jpg` / `webp`. Only used when rendering to an image. |
 | `image_font`    | `JetBrains Mono` | `string`      | Path to custom font TTF for image rendering (not used for SVG). |
+| `image_scale` | `1` | `int` | Only for image-rendering. Sets the final image scale (e.g. 2x or 4x) |
 
 There are additional options for some barcode formats:
 
