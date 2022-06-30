@@ -39,6 +39,8 @@ abstract class Barcode
 
     /**
      * Encode the given $code in binary form.
+     *
+     * @return array<int, Encoding>
      */
     abstract public function encode(): array;
 

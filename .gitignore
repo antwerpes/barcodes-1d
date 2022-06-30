@@ -11,5 +11,5 @@ phpstan.neon
 testbench.yaml
 vendor
 node_modules
-/img.svg
+/img.*
 .php-cs-fixer.cache

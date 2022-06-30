@@ -16,7 +16,7 @@ class Pharmacode extends Barcode
     protected const THIN_BAR = '1';
 
     /** @var string */
-    protected const SEPARATOR = '01';
+    protected const SEPARATOR = '00';
 
     /**
      * {@inheritDoc}

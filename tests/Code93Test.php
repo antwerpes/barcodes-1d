@@ -24,5 +24,6 @@ class Code93Test extends EncodingTestCase
             '1010111101001100101101010001001100101101001001010010001010001001100101101001110101010111101',
             $this->getBinaryString($encoder->encode()),
         );
+        $this->assertTrue((new Code93('ab12', ['full_ascii' => true]))->isValid());
     }
 }

@@ -33,5 +33,6 @@ class Code39Test extends EncodingTestCase
             '1000101110111010100010100010001011101010001011101000101000100010101110100010111011101000101011101011100010101110100010111011101',
             $this->getBinaryString($encoder->encode()),
         );
+        $this->assertTrue((new Code39('ab12', ['full_ascii' => true]))->isValid());
     }
 }
