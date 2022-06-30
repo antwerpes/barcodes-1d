@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use Antwerpes\Barcodes\Barcodes\Code25;
 
-class Code25Test extends EncodingTest
+class Code25Test extends EncodingTestCase
 {
     /** @var string */
     protected const CODE_25 = '111011101011101010101110101110101011101110111010101010101110101110111010111010101011101110101010101011101110111010111';

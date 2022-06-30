@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class EncodingTest extends TestCase
+abstract class EncodingTestCase extends TestCase
 {
     protected function getBinaryString(array $encodings): string
     {

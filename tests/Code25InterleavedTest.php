@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use Antwerpes\Barcodes\Barcodes\Code25Interleaved;
 
-class Code25InterleavedTest extends EncodingTest
+class Code25InterleavedTest extends EncodingTestCase
 {
     /** @var string */
     protected const CODE_25_INTERLEAVED = '101011101000101011100011101110100010100011101000111000101010101000111000111011101';

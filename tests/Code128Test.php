@@ -5,7 +5,7 @@ namespace Antwerpes\Barcodes\Tests;
 use Antwerpes\Barcodes\Barcodes\Code128;
 use ReflectionClass;
 
-class Code128Test extends EncodingTest
+class Code128Test extends EncodingTestCase
 {
     protected array $characters;
     protected array $charsetA;

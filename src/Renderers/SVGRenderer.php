@@ -2,9 +2,7 @@
 
 namespace Antwerpes\Barcodes\Renderers;
 
-use Antwerpes\Barcodes\Barcodes\Barcode;
 use Antwerpes\Barcodes\DTOs\Encoding;
-use Illuminate\Support\Collection;
 use SVG\Nodes\Shapes\SVGRect;
 use SVG\Nodes\Structures\SVGDocumentFragment;
 use SVG\Nodes\Structures\SVGGroup;
@@ -35,23 +33,11 @@ class SVGRenderer extends AbstractRenderer
 
     /**
      * Draw barcode for the given $encoding.
-     * We only care about the `1` bits (`0`s are empty spaces). We also want to group `1`s together,
-     * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      */
     protected function drawBarcode(SVGGroup $group, Encoding $encoding): void
     {
-        /*
-         * Split the encoding into chunks of adjacent `1` bits, disregarding all `0` bits and only
-         * keeping the original array indexes of the `1` bits, which is what we need for correct
-         * x-offset calculation.
-         * e.g. '110010111' -> [[0, 1], [4], [6, 7, 8]]
-         */
-        $chunks = collect(mb_str_split($encoding->data))
-            ->chunkWhile(fn ($value, $key, $chunk) => $value === $chunk->last())
-            ->filter(fn (Collection $value) => $value->first() === '1')
-            ->map(fn (Collection $value) => $value->keys());
+        $chunks = $this->getEncodingChunks($encoding->data);
 
-        /** @var Collection $chunk */
         foreach ($chunks as $chunk) {
             $group->addChild(new SVGRect(
                 $chunk->first() * $this->options->width,
@@ -118,23 +104,13 @@ class SVGRenderer extends AbstractRenderer
      */
     protected function createBackgroundWhenRequested(SVGDocumentFragment $document, int $width, int $height): void
     {
-        if ($this->options->background !== '' && $this->options->background !== '0') {
-            $rect = new SVGRect(0, 0, $width, $height);
-            $rect->setStyle('fill', $this->options->background);
-            $document->addChild($rect);
+        if ($this->options->background === null) {
+            return;
         }
-    }
 
-    /**
-     * Get the starting x position of the text for the given $encoding.
-     */
-    protected function getTextStart(Encoding $encoding): int|float
-    {
-        return match ($encoding->align) {
-            'left' => 0,
-            'right' => $encoding->totalWidth - 1,
-            'center' => $encoding->totalWidth / 2,
-        };
+        $rect = new SVGRect(0, 0, $width, $height);
+        $rect->setStyle('fill', $this->options->background);
+        $document->addChild($rect);
     }
 
     /**

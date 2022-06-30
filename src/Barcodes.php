@@ -23,7 +23,7 @@ use Antwerpes\Barcodes\Barcodes\Pharmacode;
 use Antwerpes\Barcodes\DTOs\BarcodeGlobalOptions;
 use Antwerpes\Barcodes\DTOs\Encoding;
 use Antwerpes\Barcodes\Exceptions\InvalidCodeException;
-use Antwerpes\Barcodes\Renderers\PNGRenderer;
+use Antwerpes\Barcodes\Renderers\ImageRenderer;
 use Antwerpes\Barcodes\Renderers\SVGRenderer;
 use InvalidArgumentException;
 
@@ -99,13 +99,13 @@ class Barcodes
     }
 
     /**
-     * Render the encoding to PNG, using the given $scale to determine output size.
+     * Render the encoding to an image, using the given $scale to determine output size.
      *
      * @noinspection PhpUnhandledExceptionInspection
      */
-    public function toPNG(int|float $scale = 1): string
+    public function toImage(int|float $scale = 1): string
     {
-        $renderer = new PNGRenderer($this->encodings, $this->options);
+        $renderer = new ImageRenderer($this->encodings, $this->options);
 
         return $renderer->setScale($scale)->render();
     }

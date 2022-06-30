@@ -56,8 +56,9 @@ abstract class Barcode
             'color' => '#000000',
             'margin' => 10,
             'display_value' => true,
-            'font' => 4,
             'font_size' => 20,
+            'image_font' => __DIR__.'/../fonts/jetbrains-mono/JetBrainsMono-Regular.ttf',
+            'image_format' => 'png',
         ]);
         $resolver->setDefined(['margin_top', 'margin_right', 'margin_bottom', 'margin_left', 'text_color']);
         $resolver->setAllowedTypes('width', ['int']);
@@ -73,9 +74,11 @@ abstract class Barcode
         $resolver->setAllowedTypes('margin_bottom', ['int']);
         $resolver->setAllowedTypes('margin_left', ['int']);
         $resolver->setAllowedTypes('text_align', ['string']);
-        $resolver->setAllowedTypes('font', ['string', 'int']);
+        $resolver->setAllowedTypes('image_font', ['string', 'int']);
+        $resolver->setAllowedTypes('image_format', ['string']);
         $resolver->setAllowedTypes('font_size', ['int']);
         $resolver->setAllowedValues('text_align', ['left', 'center', 'right']);
+        $resolver->setAllowedValues('image_format', ['png', 'jpg', 'jpeg', 'webp']);
 
         foreach (['margin_top', 'margin_right', 'margin_bottom', 'margin_left'] as $margin) {
             $resolver->setDefault($margin, fn (Options $options) => $options['margin']);

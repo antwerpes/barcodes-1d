@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use Antwerpes\Barcodes\Barcodes\Code11;
 
-class Code11Test extends EncodingTest
+class Code11Test extends EncodingTestCase
 {
     /** @var string */
     protected const CODE_11 = '1011001010101101101011010010110110010101011011010110101101101010011010101001101101001010110110110101101011001';

@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use Antwerpes\Barcodes\Barcodes\Code39;
 
-class Code39Test extends EncodingTest
+class Code39Test extends EncodingTestCase
 {
     /** @var string */
     protected const CODE_39 = '10001011101110101110101000101110101110100010111011101000101011101011100010101110100010111011101';

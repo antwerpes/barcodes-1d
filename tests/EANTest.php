@@ -9,7 +9,7 @@ use Antwerpes\Barcodes\Barcodes\EAN\EAN8;
 use Antwerpes\Barcodes\Barcodes\EAN\UPCA;
 use Antwerpes\Barcodes\Barcodes\EAN\UPCE;
 
-class EANTest extends EncodingTest
+class EANTest extends EncodingTestCase
 {
     /** @var string */
     protected const EAN_2 = '10110110001010100001';

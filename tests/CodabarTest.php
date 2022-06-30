@@ -4,7 +4,7 @@ namespace Antwerpes\Barcodes\Tests;
 
 use Antwerpes\Barcodes\Barcodes\Codabar;
 
-class CodabarTest extends EncodingTest
+class CodabarTest extends EncodingTestCase
 {
     /** @var string */
     protected const CODABAR = '10110010010101011001010100101101100101010101101001011010100101001001011';

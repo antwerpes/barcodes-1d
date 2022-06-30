@@ -8,12 +8,14 @@ use Intervention\Image\AbstractShape;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
-class PNGRenderer extends AbstractRenderer
+class ImageRenderer extends AbstractRenderer
 {
+    /** @var int */
+    protected const MAGIC_TEXT_MARGIN = 4;
     protected int|float $scale = 1;
 
     /**
-     * Render the encodings into a base64-encoded PNG image string.
+     * Render the encodings into a base64-encoded image string.
      */
     public function render(): string
     {
@@ -23,7 +25,7 @@ class PNGRenderer extends AbstractRenderer
             $this->getMaxHeight() * $this->scale,
             $this->options->background,
         );
-        $currentX = $this->options->margin_left;
+        $currentX = $this->options->margin_left * $this->scale;
 
         foreach ($this->encodings as $encoding) {
             $this->drawBarcode($image, $encoding, $currentX);
@@ -31,7 +33,7 @@ class PNGRenderer extends AbstractRenderer
             $currentX += (int) ceil($encoding->totalWidth * $this->scale);
         }
 
-        return base64_encode($image->encode('png')->getEncoded());
+        return base64_encode($image->encode($this->options->image_format)->getEncoded());
     }
 
     /**
@@ -46,8 +48,6 @@ class PNGRenderer extends AbstractRenderer
 
     /**
      * Draw barcode for the given $encoding.
-     * We only care about the `1` bits (`0`s are empty spaces). We also want to group `1`s together,
-     * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      */
     protected function drawBarcode(Image $image, Encoding $encoding, int $currentX): void
     {
@@ -66,9 +66,7 @@ class PNGRenderer extends AbstractRenderer
     }
 
     /**
-     * Draw text for the given $encoding. The text-anchor attribute defines how the `x`
-     * value is used. For example, for text-anchor=middle, the rendered characters are
-     * aligned such that the middle of the text string is at the `x` position.
+     * Draw text for the given $encoding.
      */
     protected function drawText(Image $image, Encoding $encoding, int $currentX): void
     {
@@ -80,9 +78,9 @@ class PNGRenderer extends AbstractRenderer
         $image->text(
             $encoding->text,
             $position,
-            ($this->options->margin_top + $encoding->height + $this->options->text_margin + 4) * $this->scale,
+            ($this->options->margin_top + $encoding->height + $this->options->text_margin + self::MAGIC_TEXT_MARGIN) * $this->scale,
             fn (AbstractFont $font) => $font
-                ->file($this->options->font)
+                ->file($this->options->image_font)
                 ->size($this->options->font_size * $this->scale)
                 ->align($encoding->align)
                 ->valign('top')

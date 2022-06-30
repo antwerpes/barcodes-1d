@@ -53,6 +53,8 @@ abstract class AbstractRenderer
      * keeping the original array indexes of the `1` bits, which is what we need for correct
      * x-offset calculation.
      * e.g. '110010111' -> [[0, 1], [4], [6, 7, 8]].
+     * We only care about the `1` bits (`0`s are empty spaces). We also want to group `1`s together,
+     * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      *
      * @return Collection<int, Collection<int, int>>
      * @noinspection PhpDocSignatureIsNotCompleteInspection
