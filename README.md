@@ -144,7 +144,7 @@ Generic options for all barcode formats:
 | `height`        | `100`            | `int`         | Height of a regular bar                                      |
 | `text_margin`   | `2`              | `int`         | Distance between barcode and text                            |
 | `text_align`    | `center`         | `string`      | `left` / `center` / `right`                                  |
-| `background`    | `#ffffff`        | `string|null` | Background color. Use `null` for transparent background      |
+| `background`    | `#ffffff`        | `string\|null` | Background color. Use `null` for transparent background      |
 | `color`         | `#000000`        | `string`      | Color of the barcode and text                                |
 | `text_color`    | –                | `string`      | Text color. Falls back to `color` if not set                 |
 | `margin`        | `10`             | `int`         | Margin on all sides of the barcode                           |
