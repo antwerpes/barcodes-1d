@@ -48,21 +48,20 @@ Use the `Barcodes` factory class to create an encoder and render its output to S
 
 ```php
 use Antwerpes\Barcodes\Barcodes;
-use Antwerpes\Barcodes\Barcodes\Common\BarcodeFormat;
+use Antwerpes\Barcodes\Enumerators\Format;
 
 // SVG
-$svg = Barcodes::create('12345678', BarcodeFormat::CODE_128)->toSVG();
+$svg = Barcodes::create('12345678', Format::CODE_128);
 file_put_contents('img.svg', $svg);
 
 // Or as an image
-$image = Barcodes::create('12345678', BarcodeFormat::CODE_128)->toImage();
+$image = Barcodes::create('12345678', Format::CODE_128, 'png');
 file_put_contents('img.png', base64_decode($image));
 
 // Example for scaled up (4x) WEBP
-$image = Barcodes::create('12345678', BarcodeFormat::CODE_128, [
-    'image_format' => 'webp',
+$image = Barcodes::create('12345678', Format::CODE_128, 'webp', [
     'image_scale' => 4,
-])->toImage();
+]);
 file_put_contents('img.webp', base64_decode($image));
 ```
 
@@ -74,64 +73,64 @@ Check out the [options](#options) for an overview of all customization options.
 #### Code 128
 ![Code 128](./.art/code128.svg)
 ```php
-Barcodes::create('A12345', BarcodeFormat::CODE_128)->toSVG();
+Barcodes::create('A12345', Format::CODE_128);
 ```
 #### EAN-13
 ![EAN-13](./.art/ean13.svg) ![EAN-13 Flat](./.art/ean13-flat.svg) ![EAN-13 Quiet Zone](./.art/ean13-quiet-zone.svg)
 ```php
-Barcodes::create('5901234123457', BarcodeFormat::EAN_13)->toSVG();
-Barcodes::create('5901234123457', BarcodeFormat::EAN_13, ['flat' => true])->toSVG();
-Barcodes::create('5901234123457', BarcodeFormat::EAN_13, ['with_quiet_zone' => true])->toSVG();
+Barcodes::create('5901234123457', Format::EAN_13);
+Barcodes::create('5901234123457', Format::EAN_13, 'svg', ['flat' => true]);
+Barcodes::create('5901234123457', Format::EAN_13, 'svg', ['with_quiet_zone' => true]);
 ```
 #### EAN-2 / EAN-5 / EAN-8
 ![EAN-2](./.art/ean2.svg) ![EAN-5](./.art/ean5.svg) ![EAN-8](./.art/ean8.svg)
 ```php
-Barcodes::create('53', BarcodeFormat::EAN_2)->toSVG();
-Barcodes::create('52495', BarcodeFormat::EAN_5)->toSVG();
-Barcodes::create('96385074', BarcodeFormat::EAN_8)->toSVG();
+Barcodes::create('53', Format::EAN_2);
+Barcodes::create('52495', Format::EAN_5);
+Barcodes::create('96385074', Format::EAN_8);
 ```
 #### UPC-A / UPC-E
 ![UPC-A](./.art/upca.svg) ![UPC-E](./.art/upce.svg)
 ```php
-Barcodes::create('123456789999', BarcodeFormat::UPC_A)->toSVG();
-Barcodes::create('01245714', BarcodeFormat::UPC_E)->toSVG();
+Barcodes::create('123456789999', Format::UPC_A);
+Barcodes::create('01245714', Format::UPC_E);
 // These also work and will produce the same result
-Barcodes::create('124571', BarcodeFormat::UPC_E)->toSVG();
-Barcodes::create('01210000457', BarcodeFormat::UPC_E)->toSVG();
-Barcodes::create('012100004574', BarcodeFormat::UPC_E)->toSVG();
+Barcodes::create('124571', Format::UPC_E);
+Barcodes::create('01210000457', Format::UPC_E);
+Barcodes::create('012100004574', Format::UPC_E);
 ```
 #### Codabar
 ![Codabar](./.art/codabar.svg)
 ```php
-Barcodes::create('A12345B', BarcodeFormat::CODABAR)->toSVG();
+Barcodes::create('A12345B', Format::CODABAR);
 ```
 #### Code 11
 ![Code 11](./.art/code11.svg)
 ```php
-Barcodes::create('01234-5678', BarcodeFormat::CODE_11)->toSVG();
+Barcodes::create('01234-5678', Format::CODE_11);
 ```
 #### Code 2 of 5 / Code 2 of 5 Interleaved / ITF-14
 ![Code 25](./.art/code25.svg) ![Code 25 Interleaved](./.art/code25i.svg) ![ITF-14](./.art/itf14.svg)
 ```php
-Barcodes::create('1234567', BarcodeFormat::CODE_25)->toSVG();
-Barcodes::create('12345670', BarcodeFormat::CODE_25_INTERLEAVED)->toSVG();
-Barcodes::create('98765432109213', BarcodeFormat::ITF_14)->toSVG();
+Barcodes::create('1234567', Format::CODE_25);
+Barcodes::create('12345670', Format::CODE_25_INTERLEAVED);
+Barcodes::create('98765432109213', Format::ITF_14);
 ```
 #### Code 39 / Code 93
 ![Code 39](./.art/code39.svg) ![Code 93](./.art/code93.svg)
 ```php
-Barcodes::create('AB12', BarcodeFormat::CODE_39)->toSVG();
-Barcodes::create('TEST93', BarcodeFormat::CODE_93)->toSVG();
+Barcodes::create('AB12', Format::CODE_39);
+Barcodes::create('TEST93', Format::CODE_93);
 ```
 #### MSI
 ![MSI](./.art/msi.svg)
 ```php
-Barcodes::create('8052', BarcodeFormat::MSI)->toSVG();
+Barcodes::create('8052', Format::MSI);
 ```
 #### Pharmacode
 ![MSI](./.art/pharmacode.svg)
 ```php
-Barcodes::create('1234', BarcodeFormat::PHARMACODE)->toSVG();
+Barcodes::create('1234', Format::PHARMACODE);
 ```
 
 ## Options
@@ -154,7 +153,6 @@ Generic options for all barcode formats:
 | `margin_left`   | –                | `int`         | Falls back to `margin` if not set                            |
 | `display_value` | `true`           | `bool`        | Should the code text be displayed below the barcode?         |
 | `font_size`     | `20`             | `int`         | Large font sizes may break the layout                        |
-| `image_format`  | `png`            | `string`      | `png` / `jpg` / `webp`. Only used when rendering to an image. |
 | `image_font`    | `JetBrains Mono` | `string`      | Path to custom font TTF for image rendering (not used for SVG). |
 | `image_scale` | `1` | `int` | Only for image-rendering. Sets the final image scale (e.g. 2x or 4x) |
 
@@ -188,9 +186,9 @@ There are additional options for some barcode formats:
 
 **MSI**
 
-| Option        | Default | Type          | Comment                                       |
-| ------------- | ------- | ------------- | --------------------------------------------- |
-| `check_digit` | `null`  | `string|null` | `MOD_10` / `MOD_11` / `MOD_1010` / `MOD_1110` |
+| Option        | Default | Type           | Comment                                       |
+| ------------- | ------- | -------------- | --------------------------------------------- |
+| `check_digit` | `null`  | `string\|null` | `MOD_10` / `MOD_11` / `MOD_1010` / `MOD_1110` |
 
 ## Changelog
 

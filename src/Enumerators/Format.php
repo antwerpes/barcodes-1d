@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Antwerpes\Barcodes\Barcodes\Common;
+namespace Antwerpes\Barcodes\Enumerators;
 
-class BarcodeFormat
+class Format
 {
     /** @var string */
     final public const EAN_2 = 'EAN-2';
