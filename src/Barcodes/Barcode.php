@@ -61,6 +61,7 @@ abstract class Barcode
             'font_size' => 20,
             'image_font' => __DIR__.'/../fonts/jetbrains-mono/JetBrainsMono-Regular.ttf',
             'image_format' => 'png',
+            'image_scale' => 1,
         ]);
         $resolver->setDefined(['margin_top', 'margin_right', 'margin_bottom', 'margin_left', 'text_color']);
         $resolver->setAllowedTypes('width', ['int']);
@@ -78,6 +79,7 @@ abstract class Barcode
         $resolver->setAllowedTypes('text_align', ['string']);
         $resolver->setAllowedTypes('image_font', ['string', 'int']);
         $resolver->setAllowedTypes('image_format', ['string']);
+        $resolver->setAllowedTypes('image_scale', ['int']);
         $resolver->setAllowedTypes('font_size', ['int']);
         $resolver->setAllowedValues('text_align', ['left', 'center', 'right']);
         $resolver->setAllowedValues('image_format', ['png', 'jpg', 'jpeg', 'webp']);

@@ -99,15 +99,15 @@ class Barcodes
     }
 
     /**
-     * Render the encoding to an image, using the given $scale to determine output size.
+     * Render the encoding to an image.
      *
      * @noinspection PhpUnhandledExceptionInspection
      */
-    public function toImage(int|float $scale = 1): string
+    public function toImage(): string
     {
         $renderer = new ImageRenderer($this->encodings, $this->options);
 
-        return $renderer->setScale($scale)->render();
+        return $renderer->render();
     }
 
     /**

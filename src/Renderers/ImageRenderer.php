@@ -12,7 +12,6 @@ class ImageRenderer extends AbstractRenderer
 {
     /** @var int */
     protected const MAGIC_TEXT_MARGIN = 4;
-    protected int|float $scale = 1;
 
     /**
      * Render the encodings into a base64-encoded image string.
@@ -21,29 +20,19 @@ class ImageRenderer extends AbstractRenderer
     {
         $manager = new ImageManager;
         $image = $manager->canvas(
-            $this->getTotalWidth() * $this->scale,
-            $this->getMaxHeight() * $this->scale,
+            $this->getTotalWidth() * $this->options->image_scale,
+            $this->getMaxHeight() * $this->options->image_scale,
             $this->options->background,
         );
-        $currentX = $this->options->margin_left * $this->scale;
+        $currentX = $this->options->margin_left * $this->options->image_scale;
 
         foreach ($this->encodings as $encoding) {
             $this->drawBarcode($image, $encoding, $currentX);
             $this->drawText($image, $encoding, $currentX);
-            $currentX += (int) ceil($encoding->totalWidth * $this->scale);
+            $currentX += (int) ceil($encoding->totalWidth * $this->options->image_scale);
         }
 
         return base64_encode($image->encode($this->options->image_format)->getEncoded());
-    }
-
-    /**
-     * Set scale for the final output, e.g. 1x or 2x.
-     */
-    public function setScale(int|float $scale): self
-    {
-        $this->scale = $scale;
-
-        return $this;
     }
 
     /**
@@ -54,12 +43,12 @@ class ImageRenderer extends AbstractRenderer
         $chunks = $this->getEncodingChunks($encoding->data);
 
         foreach ($chunks as $chunk) {
-            $x = $currentX + ($chunk->first() * $this->options->width * $this->scale);
+            $x = $currentX + ($chunk->first() * $this->options->width * $this->options->image_scale);
             $image->rectangle(
                 $x,
-                $this->options->margin_top * $this->scale,
-                $x + ($this->options->width * $chunk->count() * $this->scale) - 1,
-                ($this->options->margin_top + $encoding->height) * $this->scale,
+                $this->options->margin_top * $this->options->image_scale,
+                $x + ($this->options->width * $chunk->count() * $this->options->image_scale) - 1,
+                ($this->options->margin_top + $encoding->height) * $this->options->image_scale,
                 fn (AbstractShape $shape) => $shape->background($this->options->color),
             );
         }
@@ -74,14 +63,14 @@ class ImageRenderer extends AbstractRenderer
             return;
         }
 
-        $position = $currentX + ($this->getTextStart($encoding) * $this->scale);
+        $position = $currentX + ($this->getTextStart($encoding) * $this->options->image_scale);
         $image->text(
             $encoding->text,
             $position,
-            ($this->options->margin_top + $encoding->height + $this->options->text_margin + self::MAGIC_TEXT_MARGIN) * $this->scale,
+            ($this->options->margin_top + $encoding->height + $this->options->text_margin + self::MAGIC_TEXT_MARGIN) * $this->options->image_scale,
             fn (AbstractFont $font) => $font
                 ->file($this->options->image_font)
-                ->size($this->options->font_size * $this->scale)
+                ->size($this->options->font_size * $this->options->image_scale)
                 ->align($encoding->align)
                 ->valign('top')
                 ->color($this->options->text_color),

@@ -52,7 +52,10 @@ class RenderingTest extends TestCase
         $this->assertNotFalse(exif_imagetype('img.webp'));
 
         // Scaled up
-        $image = Barcodes::create('96385074', BarcodeFormat::EAN_8, ['with_quiet_zone' => true])->toImage(2);
+        $image = Barcodes::create('96385074', BarcodeFormat::EAN_8, [
+            'with_quiet_zone' => true,
+            'image_scale' => 2,
+        ])->toImage();
         file_put_contents('img.png', base64_decode($image, true));
         $this->assertNotFalse(exif_imagetype('img.png'));
 

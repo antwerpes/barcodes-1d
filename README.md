@@ -58,8 +58,11 @@ file_put_contents('img.svg', $svg);
 $image = Barcodes::create('12345678', BarcodeFormat::CODE_128)->toImage();
 file_put_contents('img.png', base64_decode($image));
 
-// Example for scaled up WEBP
-$image = Barcodes::create('12345678', BarcodeFormat::CODE_128, ['image_format' => 'webp'])->toImage(4);
+// Example for scaled up (4x) WEBP
+$image = Barcodes::create('12345678', BarcodeFormat::CODE_128, [
+    'image_format' => 'webp',
+    'image_scale' => 4,
+])->toImage();
 file_put_contents('img.webp', base64_decode($image));
 ```
 
