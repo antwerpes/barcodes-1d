@@ -10,6 +10,11 @@
 /tests                   export-ignore
 /.editorconfig           export-ignore
 /.php-cs-fixer.dist.php  export-ignore
-/art                     export-ignore
+/.art                    export-ignore
+/.ddev                   export-ignore
 /docs                    export-ignore
 /UPGRADING.md            export-ignore
+/JUSTFILE                export-ignore
+/rector.php              export-ignore
+/ecs.php                 export-ignore
+/grumphp.yml             export-ignore
