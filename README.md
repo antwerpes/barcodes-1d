@@ -65,9 +65,66 @@ Check out the [options](#options) for an overview of all customization options.
 
 ## Examples
 #### Code 128
-![Code 128](./art/code128.svg)
+![Code 128](./.art/code128.svg)
 ```php
 Barcodes::create('A12345', BarcodeFormat::CODE_128)->toSVG();
+```
+#### EAN-13
+![EAN-13](./.art/ean13.svg) ![EAN-13 Flat](./.art/ean13-flat.svg) ![EAN-13 Quiet Zone](./.art/ean13-quiet-zone.svg)
+```php
+Barcodes::create('5901234123457', BarcodeFormat::EAN_13)->toSVG();
+Barcodes::create('5901234123457', BarcodeFormat::EAN_13, ['flat' => true])->toSVG();
+Barcodes::create('5901234123457', BarcodeFormat::EAN_13, ['with_quiet_zone' => true])->toSVG();
+```
+#### EAN-2 / EAN-5 / EAN-8
+![EAN-2](./.art/ean2.svg) ![EAN-5](./.art/ean5.svg) ![EAN-8](./.art/ean8.svg)
+```php
+Barcodes::create('53', BarcodeFormat::EAN_2)->toSVG();
+Barcodes::create('52495', BarcodeFormat::EAN_5)->toSVG();
+Barcodes::create('96385074', BarcodeFormat::EAN_8)->toSVG();
+```
+#### UPC-A / UPC-E
+![UPC-A](./.art/upca.svg) ![UPC-E](./.art/upce.svg)
+```php
+Barcodes::create('123456789999', BarcodeFormat::UPC_A)->toSVG();
+Barcodes::create('01245714', BarcodeFormat::UPC_E)->toSVG();
+// These also work and will produce the same result
+Barcodes::create('124571', BarcodeFormat::UPC_E)->toSVG();
+Barcodes::create('01210000457', BarcodeFormat::UPC_E)->toSVG();
+Barcodes::create('012100004574', BarcodeFormat::UPC_E)->toSVG();
+```
+#### Codabar
+![Codabar](./.art/codabar.svg)
+```php
+Barcodes::create('A12345B', BarcodeFormat::CODABAR)->toSVG();
+```
+#### Code 11
+![Code 11](./.art/code11.svg)
+```php
+Barcodes::create('01234-5678', BarcodeFormat::CODE_11)->toSVG();
+```
+#### Code 2 of 5 / Code 2 of 5 Interleaved / ITF-14
+![Code 25](./.art/code25.svg) ![Code 25 Interleaved](./.art/code25i.svg) ![ITF-14](./.art/itf14.svg)
+```php
+Barcodes::create('1234567', BarcodeFormat::CODE_25)->toSVG();
+Barcodes::create('12345670', BarcodeFormat::CODE_25_INTERLEAVED)->toSVG();
+Barcodes::create('98765432109213', BarcodeFormat::ITF_14)->toSVG();
+```
+#### Code 39 / Code 93
+![Code 39](./.art/code39.svg) ![Code 93](./.art/code93.svg)
+```php
+Barcodes::create('AB12', BarcodeFormat::CODE_39)->toSVG();
+Barcodes::create('TEST93', BarcodeFormat::CODE_93)->toSVG();
+```
+#### MSI
+![MSI](./.art/msi.svg)
+```php
+Barcodes::create('8052', BarcodeFormat::MSI)->toSVG();
+```
+#### Pharmacode
+![MSI](./.art/pharmacode.svg)
+```php
+Barcodes::create('1234', BarcodeFormat::PHARMACODE)->toSVG();
 ```
 
 ## Options
