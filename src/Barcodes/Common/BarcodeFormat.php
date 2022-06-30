@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes\Common;
 
-class Format
+class BarcodeFormat
 {
     /** @var string */
     final public const EAN_2 = 'EAN-2';

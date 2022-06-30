@@ -10,7 +10,7 @@ use Antwerpes\Barcodes\Barcodes\Code25;
 use Antwerpes\Barcodes\Barcodes\Code25Interleaved;
 use Antwerpes\Barcodes\Barcodes\Code39;
 use Antwerpes\Barcodes\Barcodes\Code93;
-use Antwerpes\Barcodes\Barcodes\Common\Format;
+use Antwerpes\Barcodes\Barcodes\Common\BarcodeFormat;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN13;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN2;
 use Antwerpes\Barcodes\Barcodes\EAN\EAN5;
@@ -31,22 +31,22 @@ class Barcodes
 {
     /** @var array<string, class-string> */
     protected const ENCODERS = [
-        Format::EAN_2 => EAN2::class,
-        Format::EAN_5 => EAN5::class,
-        Format::EAN_8 => EAN8::class,
-        Format::EAN_13 => EAN13::class,
-        Format::UPC_A => UPCA::class,
-        Format::UPC_E => UPCE::class,
-        Format::PHARMACODE => Pharmacode::class,
-        Format::MSI => MSI::class,
-        Format::CODABAR => Codabar::class,
-        Format::CODE_25 => Code25::class,
-        Format::CODE_25_INTERLEAVED => Code25Interleaved::class,
-        Format::ITF_14 => ITF14::class,
-        Format::CODE_39 => Code39::class,
-        Format::CODE_93 => Code93::class,
-        Format::CODE_11 => Code11::class,
-        Format::CODE_128 => Code128::class,
+        BarcodeFormat::EAN_2 => EAN2::class,
+        BarcodeFormat::EAN_5 => EAN5::class,
+        BarcodeFormat::EAN_8 => EAN8::class,
+        BarcodeFormat::EAN_13 => EAN13::class,
+        BarcodeFormat::UPC_A => UPCA::class,
+        BarcodeFormat::UPC_E => UPCE::class,
+        BarcodeFormat::PHARMACODE => Pharmacode::class,
+        BarcodeFormat::MSI => MSI::class,
+        BarcodeFormat::CODABAR => Codabar::class,
+        BarcodeFormat::CODE_25 => Code25::class,
+        BarcodeFormat::CODE_25_INTERLEAVED => Code25Interleaved::class,
+        BarcodeFormat::ITF_14 => ITF14::class,
+        BarcodeFormat::CODE_39 => Code39::class,
+        BarcodeFormat::CODE_93 => Code93::class,
+        BarcodeFormat::CODE_11 => Code11::class,
+        BarcodeFormat::CODE_128 => Code128::class,
     ];
     protected ?BarcodeGlobalOptions $options = null;
     protected array $encodings = [];
