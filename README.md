@@ -154,7 +154,7 @@ Generic options for all barcode formats:
 | `display_value` | `true`           | `bool`        | Should the code text be displayed below the barcode?         |
 | `font_size`     | `20`             | `int`         | Large font sizes may break the layout                        |
 | `image_font`    | `JetBrains Mono` | `string`      | Path to custom font TTF for image rendering (not used for SVG). |
-| `image_scale` | `1` | `int` | Only for image-rendering. Sets the final image scale (e.g. 2x or 4x) |
+| `image_scale` | `1` | `int` | Sets the final image scale, e.g. 2x or 4x (not used for SVG). |
 
 There are additional options for some barcode formats:
 
