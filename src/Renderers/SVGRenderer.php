@@ -39,12 +39,8 @@ class SVGRenderer extends AbstractRenderer
         $chunks = $this->getEncodingChunks($encoding->data);
 
         foreach ($chunks as $chunk) {
-            $group->addChild(new SVGRect(
-                $chunk->first() * $this->options->width,
-                0,
-                $this->options->width * $chunk->count(),
-                $encoding->height,
-            ));
+            $offset = $chunk->first() * $this->options->width;
+            $group->addChild(new SVGRect($offset, 0, $this->options->width * $chunk->count(), $encoding->height));
         }
     }
 

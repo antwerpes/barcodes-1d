@@ -43,7 +43,8 @@ class ImageRenderer extends AbstractRenderer
         $chunks = $this->getEncodingChunks($encoding->data);
 
         foreach ($chunks as $chunk) {
-            $x = $currentX + ($chunk->first() * $this->options->width * $this->options->image_scale);
+            $offset = $chunk->first() * $this->options->width * $this->options->image_scale;
+            $x = $currentX + $offset;
             $image->rectangle(
                 $x,
                 $this->options->margin_top * $this->options->image_scale,
