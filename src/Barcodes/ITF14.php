@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 class ITF14 extends Code25Interleaved
 {
@@ -21,7 +21,7 @@ class ITF14 extends Code25Interleaved
     public function isValid(): bool
     {
         return
-            Str::of($this->code)->test('/^[0-9]{14}$/')
+            RegexHelper::test($this->code, '/^[0-9]{14}$/')
             && ((int) $this->code[13]) === $this->calculateChecksum($this->code);
     }
 

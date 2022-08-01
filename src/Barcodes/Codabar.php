@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 class Codabar extends Barcode
 {
@@ -11,7 +11,7 @@ class Codabar extends Barcode
      */
     public function isValid(): bool
     {
-        return Str::of($this->code)->test('/^[ABCD][0123456789\-\$\:\/\.\+]*[ABCD]$/');
+        return RegexHelper::test($this->code, '/^[ABCD][0123456789\-\$:\/.+]*[ABCD]$/');
     }
 
     /**
@@ -27,7 +27,7 @@ class Codabar extends Barcode
             ->join('0');
 
         return [
-            $this->createEncoding(['data' => $data, 'text' => Str::replace(['A', 'B', 'C', 'D'], '', $code)]),
+            $this->createEncoding(['data' => $data, 'text' => str_replace(['A', 'B', 'C', 'D'], '', $code)]),
         ];
     }
 

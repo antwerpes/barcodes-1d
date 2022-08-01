@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 class UPCE extends EAN
 {
@@ -73,7 +73,7 @@ class UPCE extends EAN
      */
     public function isValid(): bool
     {
-        return Str::of($this->code)->test('/^[01][0-9]{7}$/') && ($this->code[7] === $this->upcA[11]);
+        return RegexHelper::test($this->code, '/^[01][0-9]{7}$/') && ($this->code[7] === $this->upcA[11]);
     }
 
     /**

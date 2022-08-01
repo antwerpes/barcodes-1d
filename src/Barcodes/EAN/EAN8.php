@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes\EAN;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 /**
  * @see https://en.wikipedia.org/wiki/International_Article_Number
@@ -26,7 +26,7 @@ class EAN8 extends EAN
     public function isValid(): bool
     {
         return
-            Str::of($this->code)->test('/^[0-9]{8}$/')
+            RegexHelper::test($this->code, '/^[0-9]{8}$/')
             && ((int) $this->code[7]) === $this->calculateChecksum($this->code);
     }
 

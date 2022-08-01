@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Code128 extends Barcode
@@ -140,18 +140,18 @@ class Code128 extends Barcode
     public function isValid(): bool
     {
         if ($this->options['mode'] === self::MODE_A) {
-            return Str::of($this->code)->test('/^[\x00-\x5F]+$/');
+            return RegexHelper::test($this->code, '/^[\x00-\x5F]+$/');
         }
 
         if ($this->options['mode'] === self::MODE_B) {
-            return Str::of($this->code)->test('/^[\x20-\x7F]+$/');
+            return RegexHelper::test($this->code, '/^[\x20-\x7F]+$/');
         }
 
         if ($this->options['mode'] === self::MODE_C) {
-            return Str::of($this->code)->test('/^([0-9]{2})+$/');
+            return RegexHelper::test($this->code, '/^([0-9]{2})+$/');
         }
 
-        return Str::of($this->code)->test('/^[\x00-\x7F]+$/');
+        return RegexHelper::test($this->code, '/^[\x00-\x7F]+$/');
     }
 
     /**
@@ -204,7 +204,7 @@ class Code128 extends Barcode
      */
     protected function getDigitSequenceLength(string $code, int $start): int
     {
-        return Str::of(mb_substr($code, $start))->match('/^(\d+)/')->length();
+        return mb_strlen(RegexHelper::match(mb_substr($code, $start), '/^(\d+)/'));
     }
 
     /**

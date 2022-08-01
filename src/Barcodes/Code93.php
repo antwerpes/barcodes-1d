@@ -2,7 +2,6 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Arr;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Code93 extends Barcode
@@ -69,7 +68,7 @@ class Code93 extends Barcode
     {
         $allowed = $this->options['full_ascii']
             ? self::BINARIES
-            : Arr::except(self::BINARIES, ['#', '&', '@', '~']);
+            : array_diff_key(self::BINARIES, array_flip(['#', '&', '@', '~']));
         $code = $this->options['full_ascii'] ? $this->replaceASCIICharacters($this->code) : $this->code;
 
         return collect(mb_str_split($code))

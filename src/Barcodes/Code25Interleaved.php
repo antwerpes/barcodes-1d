@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 class Code25Interleaved extends Code25
 {
@@ -17,7 +17,7 @@ class Code25Interleaved extends Code25
      */
     public function isValid(): bool
     {
-        return Str::of($this->code)->test('/^([0-9]{2})+$/');
+        return RegexHelper::test($this->code, '/^([0-9]{2})+$/');
     }
 
     /**

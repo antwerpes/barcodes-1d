@@ -2,7 +2,7 @@
 
 namespace Antwerpes\Barcodes\Barcodes;
 
-use Illuminate\Support\Str;
+use Antwerpes\Barcodes\Helpers\RegexHelper;
 
 /**
  * @see https://en.wikipedia.org/wiki/Pharmacode
@@ -23,7 +23,7 @@ class Pharmacode extends Barcode
      */
     public function isValid(): bool
     {
-        if (! Str::of($this->code)->test('/^[0-9]{1,6}$/')) {
+        if (! RegexHelper::test($this->code, '/^[0-9]{1,6}$/')) {
             return false;
         }
 
