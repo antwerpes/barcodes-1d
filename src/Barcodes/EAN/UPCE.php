@@ -73,7 +73,7 @@ class UPCE extends EAN
      */
     public function isValid(): bool
     {
-        return RegexHelper::test($this->code, '/^[01][0-9]{7}$/') && ($this->code[7] === $this->upcA[11]);
+        return RegexHelper::test($this->code, '/^[01]\d{7}$/') && ($this->code[7] === $this->upcA[11]);
     }
 
     /**

@@ -4,6 +4,4 @@ namespace Antwerpes\Barcodes\Exceptions;
 
 use Exception;
 
-class RequirementsNotInstalledException extends Exception
-{
-}
+class RequirementsNotInstalledException extends Exception {}

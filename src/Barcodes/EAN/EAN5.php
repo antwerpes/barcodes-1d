@@ -26,7 +26,7 @@ class EAN5 extends EAN
      */
     public function isValid(): bool
     {
-        return RegexHelper::test($this->code, '/^[0-9]{5}$/');
+        return RegexHelper::test($this->code, '/^\d{5}$/');
     }
 
     /**

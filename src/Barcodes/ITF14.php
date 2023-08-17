@@ -21,7 +21,7 @@ class ITF14 extends Code25Interleaved
     public function isValid(): bool
     {
         return
-            RegexHelper::test($this->code, '/^[0-9]{14}$/')
+            RegexHelper::test($this->code, '/^\d{14}$/')
             && ((int) $this->code[13]) === $this->calculateChecksum($this->code);
     }
 

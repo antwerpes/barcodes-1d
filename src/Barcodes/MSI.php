@@ -39,7 +39,7 @@ class MSI extends Barcode
      */
     public function isValid(): bool
     {
-        return RegexHelper::test($this->code, '/^[0-9]+$/');
+        return RegexHelper::test($this->code, '/^\d+$/');
     }
 
     /**

@@ -17,7 +17,7 @@ class Code25Interleaved extends Code25
      */
     public function isValid(): bool
     {
-        return RegexHelper::test($this->code, '/^([0-9]{2})+$/');
+        return RegexHelper::test($this->code, '/^(\d{2})+$/');
     }
 
     /**

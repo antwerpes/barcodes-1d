@@ -57,6 +57,7 @@ abstract class AbstractRenderer
      * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      *
      * @return Collection<int, Collection<int, int>>
+     *
      * @noinspection PhpDocSignatureIsNotCompleteInspection
      */
     protected function getEncodingChunks(string $data): Collection

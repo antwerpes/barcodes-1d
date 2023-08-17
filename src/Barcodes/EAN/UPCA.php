@@ -24,7 +24,7 @@ class UPCA extends EAN
     public function isValid(): bool
     {
         return
-            RegexHelper::test($this->code, '/^[0-9]{12}$/')
+            RegexHelper::test($this->code, '/^\d{12}$/')
             && ((int) $this->code[11]) === $this->calculateUPCAChecksum($this->code);
     }
 
