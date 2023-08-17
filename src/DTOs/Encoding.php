@@ -2,14 +2,26 @@
 
 namespace Antwerpes\Barcodes\DTOs;
 
-use Spatie\DataTransferObject\DataTransferObject;
-
-class Encoding extends DataTransferObject
+class Encoding
 {
-    public string $data;
-    public ?string $text;
-    public int $height;
-    public string $align;
-    public ?int $totalHeight;
-    public ?int $totalWidth;
+    public function __construct(
+        public string $data,
+        public int $height,
+        public string $align,
+        public ?string $text = null,
+        public ?int $totalHeight = null,
+        public ?int $totalWidth = null,
+    ) {}
+
+    public static function create(array $options): static
+    {
+        return new static(
+            data: $options['data'],
+            height: $options['height'],
+            align: $options['align'],
+            text: $options['text'] ?? null,
+            totalHeight: $options['totalHeight'] ?? null,
+            totalWidth: $options['totalWidth'] ?? null,
+        );
+    }
 }

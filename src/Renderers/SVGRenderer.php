@@ -55,7 +55,7 @@ class SVGRenderer extends AbstractRenderer
             return;
         }
 
-        $text = new SVGText($encoding->text);
+        $text = new SVGText($encoding->text ?? '');
         $text->setStyle('font', $this->options->font_size.'px monospace');
         $text->setStyle('fill', $this->options->text_color);
         $y = $encoding->height + $this->options->text_margin + $this->options->font_size;

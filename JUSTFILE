@@ -1,5 +1,5 @@
 set dotenv-load := false
-PHPUNIT := 'vendor/bin/phpunit -d xdebug.max_nesting_level=250 -d memory_limit=1024M --coverage-html reports/'
+PHPUNIT := 'vendor/bin/phpunit -d xdebug.max_nesting_level=250 -d memory_limit=1024M'
 
 # [DDEV] Initial project setup
 setup:
