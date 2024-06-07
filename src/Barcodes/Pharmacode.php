@@ -23,7 +23,7 @@ class Pharmacode extends Barcode
      */
     public function isValid(): bool
     {
-        if (! RegexHelper::test($this->code, '/^[0-9]{1,6}$/')) {
+        if (! RegexHelper::test($this->code, '/^\d{1,6}$/')) {
             return false;
         }
 

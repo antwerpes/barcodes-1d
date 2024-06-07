@@ -39,7 +39,7 @@ abstract class AbstractRenderer
     /**
      * Get the starting x position of the text for the given $encoding.
      */
-    protected function getTextStart(Encoding $encoding): int|float
+    protected function getTextStart(Encoding $encoding): float|int
     {
         return match ($encoding->align) {
             'left' => 0,
@@ -57,6 +57,7 @@ abstract class AbstractRenderer
      * so that we only need to draw one (wider) rectangle if two `1`s are next to each other.
      *
      * @return Collection<int, Collection<int, int>>
+     *
      * @noinspection PhpDocSignatureIsNotCompleteInspection
      */
     protected function getEncodingChunks(string $data): Collection

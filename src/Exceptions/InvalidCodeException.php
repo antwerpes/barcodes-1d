@@ -4,6 +4,4 @@ namespace Antwerpes\Barcodes\Exceptions;
 
 use Exception;
 
-class InvalidCodeException extends Exception
-{
-}
+class InvalidCodeException extends Exception {}

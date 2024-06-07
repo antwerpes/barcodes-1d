@@ -23,7 +23,7 @@ class EAN2 extends EAN
      */
     public function isValid(): bool
     {
-        return RegexHelper::test($this->code, '/^[0-9]{2}$/');
+        return RegexHelper::test($this->code, '/^\d{2}$/');
     }
 
     /**

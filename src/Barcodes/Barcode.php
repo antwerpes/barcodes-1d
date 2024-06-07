@@ -24,12 +24,25 @@ abstract class Barcode
 
     /**
      * Get resolved options.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getOptions(): BarcodeGlobalOptions
     {
-        return new BarcodeGlobalOptions($this->options);
+        return new BarcodeGlobalOptions(
+            width: $this->options['width'],
+            text_margin: $this->options['text_margin'],
+            color: $this->options['color'],
+            image_font: $this->options['image_font'],
+            image_format: $this->options['image_format'],
+            image_scale: $this->options['image_scale'],
+            font_size: $this->options['font_size'],
+            display_value: $this->options['display_value'],
+            margin_top: $this->options['margin_top'],
+            margin_right: $this->options['margin_right'],
+            margin_bottom: $this->options['margin_bottom'],
+            margin_left: $this->options['margin_left'],
+            background: $this->options['background'] ?? null,
+            text_color: $this->options['text_color'] ?? null,
+        );
     }
 
     /**
@@ -93,12 +106,10 @@ abstract class Barcode
 
     /**
      * Calculate encoding data and create new encoding.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     protected function createEncoding(array $data): Encoding
     {
-        $encoding = new Encoding(array_merge([
+        $encoding = Encoding::create(array_merge([
             'height' => $this->options['height'],
             'align' => $this->options['text_align'],
         ], $data));

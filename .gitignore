@@ -14,3 +14,4 @@ node_modules
 /img.*
 .phpunit.cache/
 .php-cs-fixer.cache
+.phpunit.cache/

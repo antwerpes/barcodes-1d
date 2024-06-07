@@ -148,7 +148,7 @@ class Code128 extends Barcode
         }
 
         if ($this->options['mode'] === self::MODE_C) {
-            return RegexHelper::test($this->code, '/^([0-9]{2})+$/');
+            return RegexHelper::test($this->code, '/^(\d{2})+$/');
         }
 
         return RegexHelper::test($this->code, '/^[\x00-\x7F]+$/');

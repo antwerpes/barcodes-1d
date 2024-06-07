@@ -26,7 +26,7 @@ class EAN8 extends EAN
     public function isValid(): bool
     {
         return
-            RegexHelper::test($this->code, '/^[0-9]{8}$/')
+            RegexHelper::test($this->code, '/^\d{8}$/')
             && ((int) $this->code[7]) === $this->calculateChecksum($this->code);
     }
 
@@ -44,7 +44,7 @@ class EAN8 extends EAN
         $encodings = [...$encodings, ...$this->createGuardedEncoding()];
 
         if ($this->options['with_quiet_zone']) {
-            $encodings = [...$encodings, ...$this->createEndQuietZone()];
+            return [...$encodings, ...$this->createEndQuietZone()];
         }
 
         return $encodings;
