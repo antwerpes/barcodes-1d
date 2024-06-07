@@ -58,7 +58,7 @@ class ImageRenderer extends AbstractRenderer
                 $this->options->margin_top * $this->options->image_scale,
                 fn (RectangleFactory $rectangle) => $rectangle
                     ->size(
-                        $this->options->width * $chunk->count() * $this->options->image_scale,
+                        ($this->options->width * $chunk->count() * $this->options->image_scale) - 1,
                         $encoding->height * $this->options->image_scale,
                     )
                     ->background($this->options->color),
