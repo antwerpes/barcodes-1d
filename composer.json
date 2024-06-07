@@ -20,17 +20,17 @@
     "require": {
         "php": "^8.1",
         "ext-gd": "*",
-        "illuminate/collections": "^9.13",
-        "intervention/image": "^2.7",
-        "meyfa/php-svg": "^0.11.3",
+        "illuminate/collections": "^9.13|^10.0|^11.0",
+        "intervention/image": "^3.6",
+        "meyfa/php-svg": "^0.15.0",
         "spatie/data-transfer-object": "^3.7",
-        "symfony/options-resolver": "^6.0"
+        "symfony/options-resolver": "^7.1"
     },
     "require-dev": {
-        "chiiya/code-style-php": "^2.9",
-        "phpro/grumphp": "^1.12",
-        "phpunit/phpunit": "^9.5",
-        "symfony/var-dumper": "^6.0"
+        "chiiya/code-style-php": "^3.0",
+        "phpro/grumphp": "^2.5",
+        "phpunit/phpunit": "^11.2",
+        "symfony/var-dumper": "^7.1"
     },
     "autoload": {
         "psr-4": {

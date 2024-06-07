@@ -12,4 +12,5 @@ testbench.yaml
 vendor
 node_modules
 /img.*
+.phpunit.cache/
 .php-cs-fixer.cache
