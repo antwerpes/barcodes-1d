@@ -23,7 +23,6 @@
         "illuminate/collections": "^9.13|^10.0|^11.0",
         "intervention/image": "^3.6",
         "meyfa/php-svg": "^0.15.0",
-        "spatie/data-transfer-object": "^3.7",
         "symfony/options-resolver": "^7.1"
     },
     "require-dev": {
