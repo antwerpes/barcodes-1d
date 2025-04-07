@@ -260,7 +260,7 @@ class Code128Test extends EncodingTestCase
             .'1100011101011';
     }
 
-    protected function getEncoding(string|int $char, array $charset): array
+    protected function getEncoding(int|string $char, array $charset): array
     {
         $value = array_search($char, $charset, true);
 
