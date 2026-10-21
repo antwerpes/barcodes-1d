@@ -8,6 +8,13 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: '8.2'
+            illuminate: '^12.0'
+          - php: '8.3'
+            illuminate: '^13.0'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,10 +23,10 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: ${{ matrix.php }}
           coverage: none
       - name: Install composer dependencies
-        uses: ramsey/composer-install@v2
+        run: composer update --with "illuminate/collections:${{ matrix.illuminate }}" --no-interaction --prefer-dist
       - name: Execute tests
         run: |
           vendor/bin/phpunit
